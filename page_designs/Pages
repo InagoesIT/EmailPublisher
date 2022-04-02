@@ -1,0 +1,18 @@
+Pages:
+	- welcome page
+		--- "start browsing publications" button
+		--- "get started" button
+		--- "login" button
+	- login page
+		--- email input entry
+		--- "next" button
+	- login confirmation page
+		--- email confirmation entry
+		--- "done" button
+	- main page
+		--- menu
+		--- "login" button / "settings" button
+		--- publications
+	- user settings page
+		--- list of settings -> with buttons and sliders
+		--- "my publications" button -> publication list, "details" button for each publication, "stats" button for each publication

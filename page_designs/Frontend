@@ -1,0 +1,27 @@
+Frontend:
+	- publication views
+		--- any user can see publications
+	- login
+		--- input entries
+		--- button
+	- documentation
+		--- how to button
+		--- written instructions
+	- menu
+		--- style
+		--- buttons
+	- user settings (for auth users)
+		--- list of settings
+		--- buttons / sliders
+	- publication listing (for auth users)
+		--- listing titles of publications
+		--- button for expantion
+		--- statistics
+Backend:
+	- login
+	- menu
+	- user settings
+	- statistics
+	- mail receive
+		--- auth trigger
+		--- publishing mail
