@@ -13,13 +13,15 @@
 </head>
 
 <body>
-    <div class="login">
+    <div class="login-email-wrapper">
         <img class="logo" src="../image_resources/logo.png" alt="Email Publisher name wrapped by leaves crown">
         <form class="login-form">
-            <label for="login-email" id="login-label">enter your email below to get started</label>
+            <div class="input-label">
+                <label for="login-email" id="login-label">enter your email below to get started</label>
+            </div>
             <div class="input-wrapper">
-                <input type="email" id="login-email" class="login-input">
-                <svg class="input-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                <input type="email" id="login-email" class="input">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     preserveAspectRatio="xMidYMid meet" viewBox="0.0 0.0 339.7 348.1" zoomAndPan="magnify"
                     style="fill: rgb(0, 0, 0);" role="img" aria-label="Opened E-mail Icon">
                     <defs>
@@ -41,7 +43,8 @@
                     </g>
                 </svg>
             </div>
-            <button type="submit" class="login-button">continue</button>
+            <button type="button" class="continue-button login-button"
+                onClick="location.href='login_code.html'">continue</button>
         </form>
     </div>
 </body>
