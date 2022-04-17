@@ -61,7 +61,7 @@ main {
     font-size: 12px;
 }
 
-.pStatistics {
+.pStatistics, .pTags {
     background-color: #005226;
     border-radius: 30px;
     border: #005226 2px solid;
@@ -122,7 +122,7 @@ nav ul a {
     font-size: 0;
 }
 
-.publicationTitle, .publicationLink, .publicationStatistics {
+.publicationTitle, .publicationLink, .publicationStatistics, .publicationTags {
     display: inline-block;
     *display: inline;
     zoom: 1;
@@ -134,12 +134,17 @@ nav ul a {
 }
 
 .publicationTitle {
-    width: 59%;
+    width: 50%;
 }
 .publicationLink {
-    width: 25%;
+    width: 20%;
 }
 .publicationStatistics {
+    width: 15%;
+}
+
+.publicationTags
+{
     width: 15%;
 }
         
