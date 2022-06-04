@@ -1,0 +1,17 @@
+{
+    "name": "ina/code",
+    "autoload": {
+        "psr-4": {
+            "app\\" : "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "ina"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.4"
+    }
+}
