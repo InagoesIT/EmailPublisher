@@ -12,7 +12,7 @@ class m0001_initial
     		token VARCHAR(10) NOT NULL,
     		is_active BOOLEAN,
     		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    		expire_at DATE,
+    		expire_at DATE
 		) ENGINE=INNODB;";
         App::$app->db->pdo->exec($SQL);
 

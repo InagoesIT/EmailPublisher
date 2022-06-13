@@ -21,6 +21,7 @@ class Database
 	{
 		$this->createMigrationsTable();
 		$appliedMigrations = $this->getAppliedMigrations();
+
 		$files = scandir('migrations');
 		$newMigrations = [];
 
@@ -77,4 +78,17 @@ class Database
 	{
 		echo '[' . date('d-m-Y H:i:s') . '] - ' . $message . PHP_EOL;
 	}
+
+    public function deleteMigrations(array $migrations)
+    {
+        foreach ($migrations  as $migration  )
+        {
+            require_once 'migrations/' . $migration . '.php';
+            $instance = new $migration();
+            $this->log("Deleting migration $migration" . PHP_EOL);
+            $instance->down();
+            $this->log("Deleted migration $migration" . PHP_EOL);
+        }
+        $this->log("All given migrations were deleted" . PHP_EOL);
+    }
 }
