@@ -34,6 +34,7 @@ class Database
 			$className = pathinfo($migration, PATHINFO_FILENAME);
 			$instance = new $className();
 			$this->log( "Applying migration $migration");
+            $instance->down();
 			$instance->up();
 			$this->log("Applied migration $migration");
 			$newMigrations[] = $migration;

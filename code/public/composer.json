@@ -1,0 +1,15 @@
+{
+    "name": "ina/code",
+    "autoload": {
+        "psr-4": {
+            "Ina\\Code\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Paula Malina",
+            "email": "pastraguspaula@gmail.com"
+        }
+    ],
+    "require": {}
+}

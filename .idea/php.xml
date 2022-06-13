@@ -26,6 +26,7 @@
       <path value="$PROJECT_DIR$/code/vendor/illuminate/conditionable" />
       <path value="$PROJECT_DIR$/code/vendor/illuminate/container" />
       <path value="$PROJECT_DIR$/code/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
