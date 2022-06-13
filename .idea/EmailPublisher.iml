@@ -30,6 +30,7 @@
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/illuminate/conditionable" />
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/illuminate/container" />
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

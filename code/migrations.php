@@ -17,4 +17,5 @@ $config = [
 
 $app = new App($config);
 
+$app->db->deleteMigrations(["m0001_initial"]);
 $app->db->applyMigrations();

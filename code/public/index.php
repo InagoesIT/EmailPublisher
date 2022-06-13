@@ -1,7 +1,9 @@
 <?php
 
 require_once '../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 use app\controllers\AuthController;
