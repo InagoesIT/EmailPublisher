@@ -35,7 +35,7 @@ class Database
 			$className = pathinfo($migration, PATHINFO_FILENAME);
 			$instance = new $className();
 			$this->log( "Applying migration $migration");
-            $instance->down();
+			$instance->down();
 			$instance->up();
 			$this->log("Applied migration $migration");
 			$newMigrations[] = $migration;
@@ -47,7 +47,7 @@ class Database
 		}
 		else
 		{
-			 $this->log("All migrations are applied" . PHP_EOL);
+			$this->log("All migrations are applied" . PHP_EOL);
 		}
 	}
 
@@ -79,23 +79,23 @@ class Database
 		echo '[' . date('d-m-Y H:i:s') . '] - ' . $message . PHP_EOL;
 	}
 
-    public function deleteMigrations(array $migrations)
-    {
-        foreach ($migrations  as $migration  )
-        {
-            require_once 'migrations/' . $migration . '.php';
-            $instance = new $migration();
-            $this->deleteMigrationFromDb($migration);
-            $this->log("Deleting migration $migration" . PHP_EOL);
-            $instance->down();
-            $this->log("Deleted migration $migration" . PHP_EOL);
-        }
-        $this->log("All given migrations were deleted" . PHP_EOL);
-    }
-    private function deleteMigrationFromDb($migration)
-    {
-        $migration=$migration.'.php';
-        $statement = $this->pdo->prepare("DELETE FROM migrations WHERE migration = '" . $migration . "';");
-        $statement->execute();
-    }
+	public function deleteMigrations(array $migrations)
+	{
+		foreach ($migrations  as $migration  )
+		{
+			require_once 'migrations/' . $migration . '.php';
+			$instance = new $migration();
+			$this->deleteMigrationFromDb($migration);
+			$this->log("Deleting migration $migration" . PHP_EOL);
+			$instance->down();
+			$this->log("Deleted migration $migration" . PHP_EOL);
+		}
+		$this->log("All given migrations were deleted" . PHP_EOL);
+	}
+	private function deleteMigrationFromDb($migration)
+	{
+		$migration=$migration.'.php';
+		$statement = $this->pdo->prepare("DELETE FROM migrations WHERE migration = '" . $migration . "';");
+		$statement->execute();
+	}
 }

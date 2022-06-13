@@ -6,6 +6,7 @@ use app\core\App;
 class Controller
 {
 	private string $layout = 'main';
+	private string $title = 'email publisher';
 
 	public function render($view, $params = [])
 	{
@@ -26,5 +27,21 @@ class Controller
 	public function setLayout(string $layout): void
 	{
 		$this->layout = $layout;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTitle(): string
+	{
+		return $this->title;
+	}
+
+	/**
+	 * @param string $title
+	 */
+	public function setTitle(string $title): void
+	{
+		$this->title = $title;
 	}
 }

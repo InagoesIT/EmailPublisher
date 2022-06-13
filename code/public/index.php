@@ -19,11 +19,5 @@ $config = [
 ];
 
 $app = new App($config);
-
-$app->router->get('/', [SiteController::class, 'welcome']);
-
-$app->router->get('/auth', [AuthController::class, 'authEmail']);
-$app->router->post('/auth', [AuthController::class, 'auth']);
-$app->router->get('/logout', [AuthController::class, 'logout']);
-
+$app->configureRoutes();
 $app->run();

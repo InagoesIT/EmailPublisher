@@ -7,9 +7,20 @@ use app\core\DbModel;
 
 class User extends DbModel
 {
-	private string $email = '';
+	public ?int $id = null;
+	private string $email;
 	private bool $isActive = false;
-	private ?string $token = null;
+	private ?string $token;
+
+	/**
+	 * @param string $email
+	 * @param string $token
+	 */
+	public function __construct(string $email, string $token)
+	{
+		$this->email = $email;
+		$this->token = $token;
+	}
 
 	public static function tableName() : string
 	{
@@ -34,16 +45,65 @@ class User extends DbModel
 		return parent::save();
 	}
 
-	public function login()
+	public function login(): bool
 	{
-		$user = User::findOne(['email' => $this->email]);
-		if (!$user)
-		{
-			$this->addError('email', 'No user with this email');
-			return false;
-		}
+//		$user = User::findOne(['email' => $this->email]);
+//		if (!$user)
+//		{
+//			$this->addError('email', 'No user with this email');
+//			return false;
+//		}
+		$this->id = 1;
 
-		return App::$app->login($user);
+		return App::$app->login($this);
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
+
+	/**
+	 * @param int|null $id
+	 */
+	public function setId(?int $id): void
+	{
+		$this->id = $id;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isActive(): bool
+	{
+		return $this->isActive;
+	}
+
+	/**
+	 * @param bool $isActive
+	 */
+	public function setIsActive(bool $isActive): void
+	{
+		$this->isActive = $isActive;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getToken(): ?string
+	{
+		return $this->token;
+	}
+
+	/**
+	 * @param string|null $token
+	 */
+	public function setToken(?string $token): void
+	{
+		$this->token = $token;
 	}
 
 	/**
