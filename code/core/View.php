@@ -6,12 +6,15 @@ class View
 {
 	public function renderView($view, $params = [])
 	{
+		if ($view == "auth_token")
+			return $this->renderAuthToken($view, $params);
+
 		$viewContent = $this->renderViewOnly($view, $params);
 		$layoutContent = $this->layoutContent();
 		$title = App::$app->getController()->getTitle();
 
 		$cssFile = $view;
-		if ($cssFile == "auth_email" || $cssFile == "auth_token")
+		if ($cssFile == "auth_email")
 			$cssFile = "auth";
 
 		return str_replace(
@@ -20,9 +23,10 @@ class View
 			$layoutContent);
 	}
 
-	protected function layoutContent()
+	protected function layoutContent($layout = "")
 	{
-		$layout = App::$app->getController()->getLayout();
+		if ($layout == "")
+			$layout = App::$app->getController()->getLayout();
 		ob_start();
 		include_once "../views/layouts/$layout.php";
 		return ob_get_clean();
@@ -37,5 +41,22 @@ class View
 		ob_start();
 		include_once "../views/$view.php";
 		return ob_get_clean();
+	}
+
+	private function renderAuthToken($view, $params = []) : string
+	{
+		$viewContent = $this->renderViewOnly($view, $params);
+		$layoutContent = $this->layoutContent();
+		$title = App::$app->getController()->getTitle();
+		$cssFile = "auth";
+
+		$error = "";
+		if ($params["isError"])
+			$error = $this->layoutContent("error");
+
+		return str_replace(
+			array('{{content}}', '{{css_file}}', '{{title}}', '{{error}}'),
+			array($viewContent, $cssFile, $title, $error),
+			$layoutContent);
 	}
 }

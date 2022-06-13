@@ -15,21 +15,44 @@ class AuthController extends Controller
 	public function auth(Request $request, Response $response)
 	{
 		//TODO send email with token
-		//TODO verify if the token is valid!
-		//we now need to log in the user!
-		//"email: " . $_SESSION[self::EMAIL] . " token: " . $_POST[self::TOKEN];
-		$session = App::$app->session;
 		if (isset($_POST[self::TOKEN]))
+			return $this->login($request, $response);
+
+		return $this->tokenAuth($response);
+	}
+
+	private function login(Request $request, Response $response): string
+	{
+		$session = App::$app->session;
+		$token = $request->getValueFor(self::TOKEN);
+		$user = new User($session->get(self::EMAIL));
+
+		//will add the error message
+		if (!$user->isTokenValid($token))
 		{
-			$user = new User($session->get(self::EMAIL), $request->getValueFor(self::TOKEN));
-			//TODO implement error when logging in
-			$user->login();
-			$response->setStatusCode(200);
-			$response->redirect("/");
-			return null;
+			$response->setStatusCode(400);
+			$this->setTitle("authentication");
+			return $this->render('auth_token', ["isError" => true]);
 		}
 
+		$user->login();
+		$response->setStatusCode(200);
+		$response->redirect("/");
+		return "email: " . $_SESSION[self::EMAIL] . " token: " . $_POST[self::TOKEN];
+	}
+
+	//TODO make save work -> THIS DOESNT WORK
+	private function tokenAuth(Response $response)
+	{
+		$session = App::$app->session;
 		$session->set(self::EMAIL, $_POST[self::EMAIL]);
+
+		$user = new User($_POST[self::EMAIL]);
+		$user->generateToken();
+		//TODO SAVE DOESNT WORK PROPERLY (DbModel save)
+		if (!$user->save())
+			$user->updateToken();
+
 		$response->setStatusCode(200);
 		$this->setTitle("authentication");
 		return $this->render('auth_token');
