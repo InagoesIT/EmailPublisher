@@ -8,38 +8,36 @@ use app\core\DbModel;
 class User extends DbModel
 {
 	public ?int $id = null;
-	private string $email;
-	private bool $isActive = false;
-	private ?string $token;
+	public string $email;
+	public bool $isActive = false;
+	public ?string $token;
 
 	/**
 	 * @param string $email
-	 * @param string $token
 	 */
-	public function __construct(string $email, string $token)
+	public function __construct(string $email)
 	{
 		$this->email = $email;
-		$this->token = $token;
 	}
 
-	public static function tableName() : string
+	public static function tableName(): string
 	{
 		return 'users';
 	}
 
-	public static function attributes() : array
+	public static function attributes(): array
 	{
-		return ['email', 'isActive'];
+		return ['email', 'isActive', 'token'];
 	}
 
-	public function rules() : array
+	public function rules(): array
 	{
 		return [
 			'email' => [self::RULE_REQUIRED, self::RULE_EMAIL]
 		];
 	}
 
-	public function save() : bool
+	public function save(): bool
 	{
 		$this->isActive = false;
 		return parent::save();
@@ -47,15 +45,42 @@ class User extends DbModel
 
 	public function login(): bool
 	{
-//		$user = User::findOne(['email' => $this->email]);
-//		if (!$user)
-//		{
-//			$this->addError('email', 'No user with this email');
-//			return false;
-//		}
-		$this->id = 1;
+		$user = User::findOne(['email' => $this->email]);
+		$this->id = $user->id;
+		$this->activateUser();
 
+		//add the user id to the session so we know who is logged in
 		return App::$app->login($this);
+	}
+
+	public function generateToken(): void
+	{
+		$this->token = bin2hex(openssl_random_pseudo_bytes(4));
+	}
+
+	public function updateToken()
+	{
+		$statement = self::prepare("UPDATE users SET token = '" . $this->token . "' 
+										WHERE email = '" . $this->email . "';");
+		$statement->execute();
+	}
+
+	public function activateUser()
+	{
+		$this->isActive = true;
+		$statement = self::prepare("UPDATE users SET isActive = '" . $this->isActive . "' 
+										WHERE email = '" . $this->email . "';");
+		$statement->execute();
+	}
+
+	public function isTokenValid($token) : bool
+	{
+		$user = self::findOne(["email" => $this->email]);
+
+		if ($user->token == $token)
+			return true;
+
+		return false;
 	}
 
 	/**

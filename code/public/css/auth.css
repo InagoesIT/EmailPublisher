@@ -82,6 +82,11 @@ body {
     width: 70% !important;
 }
 
+.invalid-data {
+    color: red;
+    margin-bottom: 40px;
+}
+
 .auth-button:hover {
     box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
@@ -139,6 +144,11 @@ body {
         width: 135px;
     }
 
+    .invalid-data {
+        margin-bottom: 35px;
+        font-size: 20px;
+    }
+
     .continue-button {
         font-size: 20px;
     }
@@ -154,9 +164,5 @@ body {
 
     .logo {
         margin-bottom: 50px;
-    }
-
-    .input-wrapper {
-        margin-bottom: 10px;
     }
 }

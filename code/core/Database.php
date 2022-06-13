@@ -86,12 +86,13 @@ class Database
 			require_once 'migrations/' . $migration . '.php';
 			$instance = new $migration();
 			$this->deleteMigrationFromDb($migration);
-			$this->log("Deleting migration $migration" . PHP_EOL);
+			$this->log("Deleting migration $migration");
 			$instance->down();
-			$this->log("Deleted migration $migration" . PHP_EOL);
+			$this->log("Deleted migration $migration");
 		}
 		$this->log("All given migrations were deleted" . PHP_EOL);
 	}
+
 	private function deleteMigrationFromDb($migration)
 	{
 		$migration=$migration.'.php';

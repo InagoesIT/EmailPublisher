@@ -24,7 +24,7 @@ abstract class Model
 
 	abstract public function rules() : array;
 
-	public function validate()
+	public function isValid(): bool
 	{
 		foreach ($this->rules() as $attribute => $rules)
 		{
