@@ -4,13 +4,20 @@ namespace app\core;
 
 class View
 {
-	public string $title = '';
-
 	public function renderView($view, $params = [])
 	{
 		$viewContent = $this->renderViewOnly($view, $params);
 		$layoutContent = $this->layoutContent();
-		return str_replace('{{content}}', $viewContent, $layoutContent);
+		$title = App::$app->getController()->getTitle();
+
+		$cssFile = $view;
+		if ($cssFile == "auth_email" || $cssFile == "auth_token")
+			$cssFile = "auth";
+
+		return str_replace(
+			array('{{content}}', '{{css_file}}', '{{title}}'),
+			array($viewContent, $cssFile, $title),
+			$layoutContent);
 	}
 
 	protected function layoutContent()
@@ -25,13 +32,9 @@ class View
 	{
 		//pass all the params to the view
 		foreach ($params as $key => $value)
-		{
 			$$key = $value;
-		}
+
 		ob_start();
-		//display the home page if the user is logged in
-		if ($view === 'welcome' && App::isUser())
-			$view = 'home';
 		include_once "../views/$view.php";
 		return ob_get_clean();
 	}

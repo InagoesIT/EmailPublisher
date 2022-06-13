@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+use app\controllers\AuthController;
 use app\controllers\SiteController;
 use app\controllers\Controller;
 use app\models\User;
@@ -77,5 +78,13 @@ class App
 	public static function isUser() : bool
 	{
 		return self::$app->user !== null;
+	}
+
+	public function configureRoutes()
+	{
+		$this->router->get('/', [SiteController::class, 'home']);
+		$this->router->get('/auth', [AuthController::class, 'authEmail']);
+		$this->router->post('/auth', [AuthController::class, 'auth']);
+		$this->router->get('/logout', [AuthController::class, 'logout']);
 	}
 }

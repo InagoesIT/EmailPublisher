@@ -33,7 +33,7 @@ class Database
 			require_once 'migrations/' . $migration;
 			$className = pathinfo($migration, PATHINFO_FILENAME);
 			$instance = new $className();
-			$this->log( "Applying migration $migration");
+			$this->log("Applying migration $migration");
 			$instance->up();
 			$this->log("Applied migration $migration");
 			$newMigrations[] = $migration;
@@ -72,8 +72,27 @@ class Database
 		$statement->execute();
 	}
 
+	public function deleteMigrations(array $migrations)
+	{
+		foreach ($migrations as $migration)
+		{
+			$instance = new $migration();
+			$this->deleteMigrationFromDb($migration);
+			$this->log("Deleting migration $migration");
+			$instance->down();
+			$this->log("Deleted migration $migration");
+		}
+		$this->log("All given migrations were deleted" . PHP_EOL);
+	}
+
 	protected function log($message)
 	{
 		echo '[' . date('d-m-Y H:i:s') . '] - ' . $message . PHP_EOL;
+	}
+
+	private function deleteMigrationFromDb($migration)
+	{
+		$statement = $this->pdo->prepare("DELETE FROM migrations WHERE migration = '" . $migration . "';");
+		$statement->execute();
 	}
 }

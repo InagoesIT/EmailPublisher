@@ -5,23 +5,40 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Request;
 use app\core\Response;
+use app\models\User;
 
 class AuthController extends Controller
 {
-	public function auth(/*Request $request = , Response $response*/)
-	{
-		//verify if the token is valid!
-		if (isset($_POST['token']))
-			return  "email: " . $_SESSION['email'] . " token: " . $_POST['token'];
+	private const TOKEN = 'token';
+	private const EMAIL = 'email';
 
-		$_SESSION['email'] = $_POST['email'];
-		$this->setLayout('auth');
+	public function auth(Request $request, Response $response)
+	{
+		//TODO send email with token
+		//TODO verify if the token is valid!
+		//we now need to log in the user!
+		//"email: " . $_SESSION[self::EMAIL] . " token: " . $_POST[self::TOKEN];
+		$session = App::$app->session;
+		if (isset($_POST[self::TOKEN]))
+		{
+			$user = new User($session->get(self::EMAIL), $request->getValueFor(self::TOKEN));
+			//TODO implement error when logging in
+			$user->login();
+			$response->setStatusCode(200);
+			$response->redirect("/");
+			return null;
+		}
+
+		$session->set(self::EMAIL, $_POST[self::EMAIL]);
+		$response->setStatusCode(200);
+		$this->setTitle("authentication");
 		return $this->render('auth_token');
 	}
 
-	public function authEmail()
+	public function authEmail(Request $request, Response $response)
 	{
-		$this->setLayout('auth');
+		$response->setStatusCode(200);
+		$this->setTitle("authentication");
 		return $this->render('auth_email');
 	}
 

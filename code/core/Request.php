@@ -24,18 +24,27 @@ class Request
 	{
 		$body = [];
 
-		if ($this->getMethod() === 'get')
+		if ($this->getMethod() === 'GET')
 		{
 			foreach ($_GET as $key => $value)
 				$body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
 		else if ($this->getMethod() === 'POST')
 		{
-			foreach ($_GET as $key => $value)
+			foreach ($_POST as $key => $value)
 				$body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
 
 		return $body;
+	}
+
+	public function getValueFor($key)
+	{
+		if ($this->getMethod() === 'GET')
+			return $_GET[$key];
+
+		else if ($this->getMethod() === 'POST')
+			return $_POST[$key];
 	}
 
 	public function isGet()

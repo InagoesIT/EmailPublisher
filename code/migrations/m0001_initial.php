@@ -16,7 +16,7 @@ class m0001_initial
 
 	public function down()
 	{
-		$SQL = "DROP TABLE users";
+		$SQL = "DELETE FROM migrations WHERE migration = __FILE__;";
 		App::$app->db->pdo->exec($SQL);
 	}
 }
