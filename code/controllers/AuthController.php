@@ -41,15 +41,14 @@ class AuthController extends Controller
 		return "email: " . $_SESSION[self::EMAIL] . " token: " . $_POST[self::TOKEN];
 	}
 
-	//TODO make save work -> THIS DOESNT WORK
 	private function tokenAuth(Response $response)
 	{
 		$session = App::$app->session;
 		$session->set(self::EMAIL, $_POST[self::EMAIL]);
 
-		$user = new User($_POST[self::EMAIL]);
+		$user = new User();
+		$user->setEmail($_POST[self::EMAIL]);
 		$user->generateToken();
-		//TODO SAVE DOESNT WORK PROPERLY (DbModel save)
 		if (!$user->save())
 			$user->updateToken();
 

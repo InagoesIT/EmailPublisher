@@ -51,7 +51,7 @@ class View
 		$cssFile = "auth";
 
 		$error = "";
-		if ($params["isError"])
+ 		if (isset($params["isError"]))
 			$error = $this->layoutContent("error");
 
 		return str_replace(

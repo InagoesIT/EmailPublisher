@@ -8,14 +8,34 @@ use app\core\DbModel;
 class User extends DbModel
 {
 	public ?int $id = null;
-	public string $email;
+	public string $email = "";
 	public bool $isActive = false;
 	public ?string $token;
+
+	public function __construct()
+	{
+		$arguments = func_get_args();
+		$numberOfArguments = func_num_args();
+
+		if (method_exists($this, $function = '__construct'.$numberOfArguments)) {
+			call_user_func_array(array($this, $function), $arguments);
+		}
+	}
+
+	public function __construct1($email)
+	{
+		$this->email = $email;
+	}
+
+	public function __construct2($email, $token)
+	{
+		$this->token = $token;
+	}
 
 	/**
 	 * @param string $email
 	 */
-	public function __construct(string $email)
+	public function setEmail(string $email): void
 	{
 		$this->email = $email;
 	}
@@ -73,14 +93,13 @@ class User extends DbModel
 		$statement->execute();
 	}
 
-	public function isTokenValid($token) : bool
+	public function isTokenValid(string $token) : bool
 	{
 		$user = self::findOne(["email" => $this->email]);
+		echo $user->email;
+		echo $user->token;
 
-		if ($user->token == $token)
-			return true;
-
-		return false;
+		return ($user->token == $token);
 	}
 
 	/**

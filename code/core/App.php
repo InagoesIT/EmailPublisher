@@ -30,12 +30,12 @@ class App
 		$this->view = new View();
 
 		$primaryValue = $this->session->get('user');
-//		if ($primaryValue)
-//		{
-//			$primaryKey = User::primaryKey();
-//			$this->user = User::findOne([$primaryKey => $primaryValue]);
-//		}
-//		else
+		if ($primaryValue)
+		{
+			$primaryKey = User::primaryKey();
+			$this->user = User::findOne([$primaryKey => $primaryValue]);
+		}
+		else
 			$this->user = null;
 	}
 

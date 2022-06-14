@@ -7,7 +7,7 @@ if (isset($_POST['email']))
 ?>
 
 <div class="container" id="container1">
-    <P>Do you want to publish your emails? Well, our site it's your solution!</P>
+    <P>Do you want to publish your emails? Well, our site is your solution!</P>
     <img src="images/welcome.png" alt="1 person holds an email and the other one looks at a site">
     <div class="row">
         <button class="button" id="button1">Get info</button>
