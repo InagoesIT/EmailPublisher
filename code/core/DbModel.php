@@ -3,6 +3,7 @@
 namespace app\core;
 
 use Exception;
+use PDO;
 
 abstract class DbModel extends Model
 {
@@ -27,13 +28,12 @@ abstract class DbModel extends Model
 				implode(',', $attributes) . ") 
 			VALUES(" . implode(',', $params) . ")");
 
-			//the binding doesnt work ok?? it is not inserted (the execute generates errors)!!!
 			foreach ($attributes as $attribute)
+			{
+				if ((substr($attribute, 0, 2) == "is"))
+					$statement->bindParam(":$attribute", $this->{$attribute}, PDO::PARAM_INT);
 				$statement->bindValue(":$attribute", $this->{$attribute});
-
-			//this works
-			//$statement = self::prepare("INSERT INTO users (email,isActive,token) VALUES('ina@j.com',true,
-			//'12dd12dd');");
+			}
 
 			$statement->execute();
 			return true;
