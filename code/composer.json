@@ -1,18 +1,15 @@
 {
-    "name": "ina/code",
+    "name": "app/code",
     "autoload": {
         "psr-4": {
-            "app\\" : "./"
+            "App\\Code\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "ina"
+            "name": "Paula Malina",
+            "email": "pastraguspaula@gmail.com"
         }
     ],
-    "require": {
-        "ext-pdo": "*",
-        "vlucas/phpdotenv": "^5.4",
-      "ext-openssl": "*"
-    }
+    "require": {}
 }
