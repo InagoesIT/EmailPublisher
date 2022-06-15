@@ -30,6 +30,8 @@ nav {
 
 .headerText {
     margin-top: 4.5%;
+    display: inline-flex;
+    width: 85%;
 }
 
 .logo {
@@ -71,6 +73,19 @@ main {
     padding: 10px 0%;
     width: 75%;
     margin-top: 16px;
+}
+
+.pLogout {
+    background-color: white;
+    border-radius: 30px;
+    border: #005226 2px solid;
+    color: #005226;
+    font-family: 'Roboto Mono Light', monospace;
+    font-size: 12px;
+    padding: 10px 0%;
+    width: 15%;
+    margin-top: 16px;
+    margin-left: 48%;
 }
 
 p {

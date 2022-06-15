@@ -1,9 +1,0 @@
-{
-    "name": "ina/code",
-    "autoload": {
-        "psr-4": {
-            "Ina\\Code\\": "src/"
-        }
-    },
-    "require": {}
-}
