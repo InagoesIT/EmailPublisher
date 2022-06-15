@@ -21,7 +21,7 @@ class m0001_initial
             idUser INT,
             isPublic BOOLEAN,
             password VARCHAR(255),
-            bodyPath VARCHAR(255),
+            bodyPath MEDIUMTEXT,
             subject VARCHAR(2000),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             expireAt DATE
