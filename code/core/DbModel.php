@@ -40,6 +40,7 @@ abstract class DbModel extends Model
 		}
 		catch (Exception $exception)
 		{
+            echo "nu vreau sa inserez si cu asta basta";
 			return false;
 		}
 	}

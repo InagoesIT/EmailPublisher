@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\Database;
+use app\models\Publication;
 use function MongoDB\BSON\toJSON;
 use app\models\User;
 
@@ -35,7 +36,8 @@ class MailController extends Controller
                 $myEmail=$header->sender[0]->mailbox . '@' . $header->sender[0]->host;
 
                 echo $myEmail . "<br>";
-                if(!User::verifyIfEmailExists($myEmail)){
+                //cream un user nou in cazul in care acesta nu este in db
+                if(!User::verifyIfEmailExists($myEmail) && $myEmail!='emailpublisherweb@gmail.com'){
                     $user= new User();
                     $user->setEmail($myEmail);
                     $user->setIsActive(true);
@@ -45,6 +47,24 @@ class MailController extends Controller
 
                 error_reporting(E_ALL ^ E_NOTICE);
                 $body = imap_fetchbody($conn, $msg_number, "2");
+
+                //adaugam publicatiile in db
+
+                $publication=new Publication();
+
+                //TODO verify if a publication is already in db or put flag to unseen
+                //TODO parse subject for getting the time, the method of visibility, etc => SET IS PUBLIC 0 OR 1
+                // if you get the duration then you should populate expireAt field
+
+                $id=User::getUserIdByEmail($header->sender[0]->mailbox);
+                $publication->setIdUser($id);
+
+                $publication->setIsPublic(0);
+                $publication->setPassword('password');
+                $publication->setSubject($header->subject);
+                $publication->setBody($body);
+                $publication->save();
+
                 $printable = imap_qprint($body);
 
                 echo $header->subject . "<br>";

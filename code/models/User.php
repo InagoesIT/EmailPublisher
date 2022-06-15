@@ -118,6 +118,17 @@ class User extends DbModel
         }
         return false;
     }
+    public static function getUserIdByEmail($myEmail) : ?int{
+        $query="SELECT * FROM users where email like '$myEmail%'";
+        echo $query;
+        $statement=self::prepare($query);
+        $statement->execute();
+        if($statement->rowCount()==1){
+            $row=$statement->fetch();
+            return $row['id'];
+        }
+        return 0;
+    }
 
     /**
      * @return int|null
