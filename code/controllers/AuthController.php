@@ -6,18 +6,51 @@ use app\core\App;
 use app\core\Request;
 use app\core\Response;
 use app\models\User;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 class AuthController extends Controller
 {
 	private const TOKEN = 'token';
 	private const EMAIL = 'email';
 
+    public function sendMail (User $user)
+    {
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->Username = 'emailpublisherweb@gmail.com'; // YOUR gmail email
+            $mail->Password = 'lqfalrpltsljnbwx'; // YOUR gmail password
+
+            // Sender and recipient settings
+            $mail->setFrom($mail->Username, 'EmailPublisher');
+            $mail->addAddress($user->email, $user->email);
+
+            // Setting the email content
+            $mail->IsHTML(true);
+            $mail->Subject = "Validation token";
+            $mail->Body = 'Your token is:<br>' . $user->token;
+            $mail->AltBody = $user->token;
+
+            $mail->send();
+        } catch (Exception $e) {
+
+        }
+    }
+
 	public function auth(Request $request, Response $response)
 	{
-		//TODO send email with token
 		if (isset($_POST[self::TOKEN]))
 			return $this->login($request, $response);
-
 		return $this->tokenAuth($response);
 	}
 
@@ -51,6 +84,8 @@ class AuthController extends Controller
 		$user->generateToken();
 		if (!$user->save())
 			$user->updateToken();
+
+        $this->sendMail($user);
 
 		$response->setStatusCode(200);
 		$this->setTitle("authentication");
