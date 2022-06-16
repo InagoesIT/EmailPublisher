@@ -1,5 +1,5 @@
 {
-    "name": "raul0/code",
+    "name": "paula-malina/code",
     "autoload": {
         "psr-4": {
             "app\\": "./"
@@ -7,8 +7,8 @@
     },
     "authors": [
         {
-            "name": "Raul-Madalin",
-            "email": "raul05madalin@yahoo.com"
+            "name": "Paula Malina",
+            "email": "pastraguspaula@gmail.com"
         }
     ],
     "require": {
