@@ -89,6 +89,6 @@ class App
 		$this->router->get('/logout', [AuthController::class, 'logout']);
 
         // TEST ONLY
-        $this->router->get('/mail', [MailController::class, 'getMail']);
+        $this->router->get('/mail', [MailController::class, 'processInbox']);
 	}
 }
