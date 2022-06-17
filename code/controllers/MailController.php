@@ -24,9 +24,8 @@ class MailController extends Controller
     public function setupInbox()
     {
         $this->conn = imap_open(self::HOST, self::USER, self::PASSWORD) or die("unable to connect Gmail: " . imap_last_error());
-        $mails = imap_search($this->conn, 'UNSEEN');
 
-        return $mails;
+        return imap_search($this->conn, 'UNSEEN');
     }
 
     public function checkUser($pub, $msg_number)
@@ -38,7 +37,7 @@ class MailController extends Controller
             $user= new User();
             $user->setEmail($senderAddress);
             $user->setIsActive(true);
-            $user->setToken('1234567'); // TODO generate token
+            $user->generateToken();
             $user->save();
 
             $pub->setIdUser($user->getId());
@@ -46,6 +45,22 @@ class MailController extends Controller
         else
             $pub->setIdUser(User::getUserIdByEmail($senderAddress));
     }
+
+	public static function configureMail($mail)
+	{
+		$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+		$mail->isSMTP();
+		$mail->Host = 'smtp.gmail.com';
+		$mail->SMTPAuth = true;
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+		$mail->Port = 587;
+
+		$mail->Username = 'emailpublisherweb@gmail.com'; // YOUR gmail email
+		$mail->Password = 'lqfalrpltsljnbwx'; // YOUR gmail password
+
+		// Sender and recipient settings
+		$mail->setFrom($mail->Username, 'EmailPublisher');
+	}
 
     public function checkSubject($pub, $msg_number): string
     {
@@ -112,22 +127,11 @@ class MailController extends Controller
 
         try {
             // Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            $mail->Username = 'emailpublisherweb@gmail.com'; // YOUR gmail email
-            $mail->Password = 'lqfalrpltsljnbwx'; // YOUR gmail password
-
-            // Sender and recipient settings
-            $mail->setFrom($mail->Username, 'EmailPublisher');
+            self::configureMail($mail);
             $mail->addAddress($address, $address);
 
             // Setting the email content
-//            $mail->IsHTML(true);
+			// $mail->IsHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $body;
             $mail->AltBody = $body;

@@ -31,6 +31,9 @@
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/illuminate/container" />
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/code/vendor/phpoption/phpoption" />
+      <excludeFolder url="file://$MODULE_DIR$/code/vendor/vlucas/phpdotenv" />
+      <excludeFolder url="file://$MODULE_DIR$/code/vendor/graham-campbell/result-type" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

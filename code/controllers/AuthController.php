@@ -21,22 +21,11 @@ class AuthController extends Controller
 
         try {
             // Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            $mail->Username = 'emailpublisherweb@gmail.com'; // YOUR gmail email
-            $mail->Password = 'lqfalrpltsljnbwx'; // YOUR gmail password
-
-            // Sender and recipient settings
-            $mail->setFrom($mail->Username, 'EmailPublisher');
+			MailController::configureMail($mail);
             $mail->addAddress($user->email, $user->email);
 
             // Setting the email content
-            $mail->IsHTML(true);
+            $mail->IsHTML();
             $mail->Subject = "Validation token";
             $mail->Body = 'Your token is:<br>' . $user->token;
             $mail->AltBody = $user->token;
