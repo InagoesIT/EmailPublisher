@@ -56,7 +56,10 @@ abstract class DbModel extends Model
 			$statement->bindValue(":$key", $item);
 		$statement->execute();
 
-		return $statement->fetchObject(static::class);
+		$result = $statement->fetchObject(static::class);
+		if (!$result)
+			return null;
+		return $result;
 	}
 
 	public static function prepare($sql)

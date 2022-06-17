@@ -7,31 +7,25 @@ use app\core\DbModel;
 
 class Publication extends DbModel
 {
-    public int $id;
+    public ?int $id;
     public string $body;
     public string $subject;
     public bool $isPublic;
-    public string $password;
+    public ?string $password;
     public int $idUser;
 
-    /**
-     * @param String $body
-     * @param String $subject
-     * @param bool $isPublic
-     * @param String $password
-     */
     public function __construct()
     {
     }
 
-    public function __construct1(string $body, string $subject, bool $isPublic, string $password, int $idUser)
-    {
-        $this->body = $body;
-        $this->subject = $subject;
-        $this->isPublic = $isPublic;
-        $this->password = $password;
-        $this->idUser = $idUser;
-    }
+//    public function __construct1(string $body, string $subject, bool $isPublic, string $password, int $idUser)
+//    {
+//        $this->body = $body;
+//        $this->subject = $subject;
+//        $this->isPublic = $isPublic;
+//        $this->password = $password;
+//        $this->idUser = $idUser;
+//    }
 
     static public function tableName(): string
     {
@@ -52,7 +46,7 @@ class Publication extends DbModel
     {
         // TODO: Implement rules() method. TREBUIE DE FACUT
         return [
-            'isUser' => []
+            'idUser' => []
         ];
     }
 

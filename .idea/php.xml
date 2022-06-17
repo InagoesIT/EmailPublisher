@@ -27,6 +27,9 @@
       <path value="$PROJECT_DIR$/code/vendor/illuminate/container" />
       <path value="$PROJECT_DIR$/code/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/code/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/code/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/code/vendor/graham-campbell/result-type" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
