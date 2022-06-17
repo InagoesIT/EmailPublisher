@@ -2,8 +2,11 @@
 
 namespace app\controllers;
 
+use app\core\App;
 use app\core\Database;
 use app\models\Publication;
+use DateInterval;
+use DateTime;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -16,8 +19,8 @@ class MailController extends Controller
     private const USER = "emailpublisherweb@gmail.com";
     private const PASSWORD = "lqfalrpltsljnbwx";
     private const PATTERN = "/(\[{1}).*?(\]{1})/i";
-    private const INVALID_SUBJECT = "Invalid Subject";
-    private const VALID_SUBJECT = "Valid Subject";
+    private const INVALID_SUBJECT = "Invalid Publish";
+    private const VALID_SUBJECT = "Valid Publish";
 
     private $conn;
 
@@ -37,7 +40,7 @@ class MailController extends Controller
             $user= new User();
             $user->setEmail($senderAddress);
             $user->setIsActive(true);
-            $user->generateToken();
+//            $user->generateToken();     // TODO generate token
             $user->save();
 
             $pub->setIdUser($user->getId());
@@ -64,7 +67,6 @@ class MailController extends Controller
 
     public function checkSubject($pub, $msg_number): string
     {
-        // TODO all echos to be replaced with actions accordingly
         $header = imap_headerinfo($this->conn, $msg_number);
         $subject = $header->subject;
 
@@ -80,6 +82,10 @@ class MailController extends Controller
                         $pub->setPassword($password);
                         break;
                     case "[duration":
+                        date_default_timezone_set('Europe/Bucharest');
+                        $createdAt = new DateTime();
+                        $pub->setCreatedAt($createdAt->format('Y-m-d H:i:s'));
+
                         $duration = preg_split("/[dhm]/", $tag[1]);
                         if (strpos($tag[1], "d") > strpos($tag[1], "h") ||
                             strpos($tag[1], "d") > strpos($tag[1], "m") ||
@@ -88,24 +94,24 @@ class MailController extends Controller
                         else {
                             echo "<br>";
                             if (str_contains($tag[1], "d") && str_contains($tag[1], "h") && str_contains($tag[1], "m")) {
-                                echo "Days: " . $duration[0] . "<br>";
-                                echo "Hours: " . $duration[1] . "<br>";
-                                echo "Minutes: " . $duration[2] . "<br>";
+                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H{$duration[2]}M"));
+                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                             }
                             else if (str_contains($tag[1], "d") && str_contains($tag[1], "h")) {
-                                echo "Days: " . $duration[0] . "<br>";
-                                echo "Hours: " . $duration[1] . "<br>";
+                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H"));
+                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                             }
                             else if (str_contains($tag[1], "d") && str_contains($tag[1], "m")) {
-                                echo "Days: " . $duration[0] . "<br>";
-                                echo "Minutes: " . $duration[1] . "<br>";
+                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}M"));
+                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                             }
                             else if (str_contains($tag[1], "h") && str_contains($tag[1], "m")) {
-                                echo "Hours: " . $duration[0] . "<br>";
-                                echo "Minutes: " . $duration[1] . "<br>";
+                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}H{$duration[1]}M"));
+                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                             }
                             else if (str_contains($tag[1], "m")) {
-                                echo "Minutes: " . $duration[0] . "<br>";
+                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}M"));
+                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                             }
                         }
                         break;
@@ -129,9 +135,6 @@ class MailController extends Controller
             // Server settings
             self::configureMail($mail);
             $mail->addAddress($address, $address);
-
-            // Setting the email content
-			// $mail->IsHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $body;
             $mail->AltBody = $body;
@@ -151,84 +154,23 @@ class MailController extends Controller
                 $this->checkUser($pub, $msg_number);
                 $goodMail = $this->checkSubject($pub, $msg_number);
 
+                $pub->setBody(imap_fetchbody($this->conn, $msg_number, "2"));
+//                imap_clearflag_full($this->conn, $msg_number, "\\Seen");
+                $pub->setLink($_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/" . md5(uniqid(), false));
+
                 $header = imap_headerinfo($this->conn, $msg_number);
                 $senderAddress = $header->sender[0]->mailbox . '@' . $header->sender[0]->host;
 
-                echo "<br><br><br>" . $goodMail . "<br><br><br>";
-
-                if ($goodMail == self::VALID_SUBJECT)     // TODO publication link
+                if ($goodMail == self::VALID_SUBJECT) {    // TODO publication link
+                    $pub->save();
                     $this->sendMail($senderAddress, $goodMail,
-                        "Thank you for publishing your mail.\n");
+                        "Thank you for publishing your mail. <br>
+                        Your publication can be found at {$pub->getLink()} until {$pub->getExpireAt()} using password {$pub->getPassword()}.<br>
+                        Have a wonderful day!");
+                }
                 else
                     $this->sendMail($senderAddress, $goodMail,
-                        "We are sorry to inform you, your mail was not published.\n");
-            }
-    }
-
-    // TODO remove code below when not useful anymore, function never called
-    public function getMail()
-    {
-
-        $host = "{imap.gmail.com:993/imap/ssl/novalidate-cert/norsh}INBOX";
-
-        $user = "emailpublisherweb@gmail.com";
-        $password = "lqfalrpltsljnbwx";
-
-
-        $conn = imap_open($host, $user, $password) or die("unable to connect Gmail: " . imap_last_error());
-        $mails = imap_search($conn, 'UNSEEN');
-
-        if ($mails == NULL)
-            echo "NO NEW EMAILS";
-        else
-            foreach ($mails as $msg_number) {
-
-                $path='C:\\xampp\\htdocs\\emailPublisher\\mail_files\\' . $msg_number . 'mail.html';
-
-                $header = imap_headerinfo($conn, $msg_number);
-
-//                echo "personal " . $header->sender[0]->mailbox . "<br>";
-//                echo "fromaddress " . $header->sender[0]->host . "<br>";
-
-                $myEmail=$header->sender[0]->mailbox . '@' . $header->sender[0]->host;
-
-                echo $myEmail . "<br>";
-                //cream un user nou in cazul in care acesta nu este in db
-                if(!User::verifyIfEmailExists($myEmail) && $myEmail!='emailpublisherweb@gmail.com'){
-                    $user= new User();
-                    $user->setEmail($myEmail);
-                    $user->setIsActive(true);
-                    $user->setToken('1234567'); // TODO generate token
-                    $user->save();
-                }
-
-                error_reporting(E_ALL ^ E_NOTICE);
-                $body = imap_fetchbody($conn, $msg_number, "2");
-
-                //adaugam publicatiile in db
-
-                $publication=new Publication();
-
-                //TODO verify if a publication is already in db or put flag to unseen
-                //TODO parse subject for getting the time, the method of visibility, etc => SET IS PUBLIC 0 OR 1
-                // if you get the duration then you should populate expireAt field
-
-                $id=User::getUserIdByEmail($header->sender[0]->mailbox);
-                $publication->setIdUser($id);
-
-                $publication->setIsPublic(0);
-                $publication->setPassword('password');
-                $publication->setSubject($header->subject);
-                $publication->setBody($body);
-                $publication->save();
-
-                $printable = imap_qprint($body);
-
-                echo $header->subject . "<br>";
-
-                file_put_contents($path, $printable);
-
-                imap_clearflag_full($conn, $msg_number, "\\Seen");
+                        "We are sorry to inform you, your mail was not published.");
             }
     }
 }

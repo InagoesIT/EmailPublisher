@@ -22,8 +22,8 @@ class m0001_initial
             isPublic BOOLEAN,
             password VARCHAR(255),
             body MEDIUMTEXT,
-            subject VARCHAR(2000),
-            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            link VARCHAR(255),
+            createdAt DATE,
             expireAt DATE
         ) ENGINE=INNODB;";
 		App::$app->db->pdo->exec($SQL);
