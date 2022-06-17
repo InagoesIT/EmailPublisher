@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\controllers\AuthController;
+use app\controllers\MailController;
 use app\controllers\SiteController;
 use app\controllers\Controller;
 use app\models\User;
@@ -86,5 +87,8 @@ class App
 		$this->router->get('/auth', [AuthController::class, 'authEmail']);
 		$this->router->post('/auth', [AuthController::class, 'auth']);
 		$this->router->get('/logout', [AuthController::class, 'logout']);
+
+        // TEST ONLY
+        $this->router->get('/mail', [MailController::class, 'processInbox']);
 	}
 }

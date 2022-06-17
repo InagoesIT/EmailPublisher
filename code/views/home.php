@@ -3,6 +3,7 @@
 <header>
     <div class="headerText">
         <h1>Hello, <?php echo App::$app->user->getEmail() ?> !</h1>
+        <button type="button" class="pLogout" onclick="window.location.href='/logout'">Logout</button>
     </div>
 </header>
 

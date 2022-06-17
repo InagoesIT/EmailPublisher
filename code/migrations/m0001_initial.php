@@ -9,7 +9,7 @@ class m0001_initial
 		$SQL = "CREATE TABLE users (
     		id INT AUTO_INCREMENT PRIMARY KEY,
     		email VARCHAR(255) NOT NULL UNIQUE,
-    		token VARCHAR(10) NOT NULL,
+    		token VARCHAR(10),
     		isActive BOOLEAN NOT NULL,
     		createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     		expireAt DATE
@@ -21,7 +21,7 @@ class m0001_initial
             idUser INT,
             isPublic BOOLEAN,
             password VARCHAR(255),
-            bodyPath VARCHAR(255),
+            body MEDIUMTEXT,
             subject VARCHAR(2000),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             expireAt DATE
