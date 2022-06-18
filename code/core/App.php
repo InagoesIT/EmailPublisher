@@ -4,8 +4,10 @@ namespace app\core;
 
 use app\controllers\AuthController;
 use app\controllers\MailController;
+use app\controllers\PublishController;
 use app\controllers\SiteController;
 use app\controllers\Controller;
+use app\models\Publication;
 use app\models\User;
 
 class App
@@ -83,6 +85,7 @@ class App
 
 	public function configureRoutes()
 	{
+
 		$this->router->get('/', [SiteController::class, 'home']);
 		$this->router->get('/auth', [AuthController::class, 'authEmail']);
 		$this->router->post('/auth', [AuthController::class, 'auth']);
@@ -90,5 +93,13 @@ class App
 
         // TEST ONLY
         $this->router->get('/mail', [MailController::class, 'processInbox']);
+
+        // PUBLICATIONS ROUTES
+        $publications = Publication::findAll();
+        if ($publications != NULL)
+            foreach ($publications as $pub) {
+                $link = $pub->link;
+                $this->router->get('/publication/' . $link, [PublishController::class, 'getPublish']);
+            }
 	}
 }
