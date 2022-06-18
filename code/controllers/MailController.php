@@ -169,8 +169,9 @@ class MailController extends Controller
                 $pub->setLink($link);
 
                 // TODO change path to relative to project
-                $my_print= imap_body($this->conn, $msg_number);
-                $path="C:/xampp/htdocs/emailPublisher/mail_files/mail/{$link}.html";
+//                $my_print= imap_body($this->conn, $msg_number);
+                $my_print = imap_fetchbody($this->conn, $msg_number, 2);
+                $path="../../publications/{$link}.html";
                 file_put_contents($path, $my_print);
                 $pub->setBody($path);
 
