@@ -8,15 +8,18 @@ class Stats extends DbModel
 {
     public int $id;
     public int $idPublication;
-    public String $country;
+    public string $country;
     public $viewTime;
 
     public function __construct()
     {
     }
-    public static function getCountById(){
+
+    public static function getCountById()
+    {
 
     }
+
     static public function tableName(): string
     {
         return 'stats';
@@ -24,17 +27,34 @@ class Stats extends DbModel
 
     static public function attributes(): array
     {
-        return ['id', 'idPublication', 'country' , 'viewTime'];
+        return ['id', 'idPublication', 'country', 'viewTime'];
     }
 
     static public function primaryKey(): string
     {
-       return 'id';
+        return 'id';
     }
 
     public function rules(): array
     {
         return [];
+    }
+
+    public static function findByIdPublication(int $idPublication): array
+    {
+        $sql = "SELECT * FROM stats where idPublication=$idPublication";
+        $statement = self::prepare($sql);
+        $statement->execute();
+        $resultArray=array();
+        if ($statement->rowCount() > 0) {
+            for($index=0; $index<$statement->rowCount(); $index++)
+            {
+                $row=$statement->fetch();
+                $resultArray[$index]=$row['viewTime'];
+            }
+        }
+        return $resultArray;
+
     }
 
 

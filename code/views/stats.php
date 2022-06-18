@@ -2,9 +2,12 @@
 <?php use app\controllers\StatsController; ?>
 <?php
 if( isset($_POST['endDate']) & isset($_POST['startDate'])){
+    echo "acum setez ";
     StatsController::$startDate=$_POST['startDate'];
     StatsController::$endDate=$_POST['endDate'];
-    StatsController::printDate();
+    $session = App::$app->session;
+    $session->set("startDate", $_POST['startDate']);
+    $session->set("endDate", $_POST['endDate']);
 }
 ?>
 <div class="appBar" id="appBar">
@@ -19,18 +22,18 @@ if( isset($_POST['endDate']) & isset($_POST['startDate'])){
     <form method="post" class="firstRow">
         <div class="column1">
             <label for="startDate" class="selecting1">Select start date:</label>
-            <input type="date" id="startDate" name="startDate" class="date"  value="startDate" >
+            <input type="datetime-local" id="startDate" name="startDate" class="date"  value="startDate" >
         </div>
         <div class="column2">
             <label for="endDate" class="selecting2">Select end date:</label>
-            <input type="date" id="endDate" name="endDate" class="date" >
+            <input type="datetime-local" id="endDate" name="endDate" class="date" >
         </div>
         <input type="submit" value="Submit" class="GenerateButton"  >
     </form>
 </div>
 <hr>
 <div class="FirstStatsPlace">
-    <p class="Text2">Number of views: <?php echo App::$app->user->getEmail() ?> </p>
+    <p class="Text2">Number of views: <?php echo StatsController::$nrViews?> </p>
     <p class="Text3"> The origin country for the visitors:</p>
     <img src="images/diagram.png" alt="diagram1" class="image1">
     <div class="ExportRow">

@@ -32,7 +32,7 @@ class m0001_initial
             id INT AUTO_INCREMENT PRIMARY KEY,
             idPublication INT,
             country VARCHAR(255),
-            viewTime DATE
+            viewTime TIMESTAMP
         ) ENGINE =INNODB;";
         App::$app->db->pdo->exec($SQL);
     }
