@@ -8,6 +8,7 @@ use app\controllers\PublishController;
 use app\controllers\SiteController;
 use app\controllers\Controller;
 use app\models\Publication;
+use app\controllers\StatsController;
 use app\models\User;
 
 class App
@@ -90,6 +91,10 @@ class App
 		$this->router->get('/auth', [AuthController::class, 'authEmail']);
 		$this->router->post('/auth', [AuthController::class, 'auth']);
 		$this->router->get('/logout', [AuthController::class, 'logout']);
+
+        $this->router->get('/stats',[StatsController::class, 'print'] );
+        $this->router->post('/stats',[StatsController::class, 'operatiune'] );
+
 
         // TEST ONLY
         $this->router->get('/mail', [MailController::class, 'processInbox']);

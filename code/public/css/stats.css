@@ -13,7 +13,7 @@ body {
 }
 .logoPlace{
     width: 160px;
-    background-color: #C4C4C4;
+    /*background-color: #C4C4C4;*/
     
 }
 .title{
@@ -22,7 +22,7 @@ body {
     font-family: 'Roboto Mono Light', monospace;
     text-align: center;
     float: left;
-    margin-left: 20%;
+    margin-left: 20px;
 }
 .button{
     font-family: 'Roboto Mono Light', monospace;

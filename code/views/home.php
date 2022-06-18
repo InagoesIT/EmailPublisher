@@ -19,7 +19,23 @@
         <h2>Your publications:</h2>
         <div class="publication">
             <div class="publicationTitle"><p class="pTitle">Title</p></div>
-            <div class="publicationLink"><a class="pLink" href="https://www.youtube.com"></a></div>
+<!--            <div class="publicationLink"><a class="pLink" href="https://www.youtube.com"></a></div>-->
+            <div class="publicationTags">
+                <button type="button" class="pTags">Change Tags</button>
+            </div>
+
+
+
+            <div class="publicationStatistics">
+                <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
+            </div>
+
+
+
+        </div>
+        <div class="publication">
+            <div class="publicationTitle"><p class="pTitle">Title</p></div>
+<!--            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>-->
             <div class="publicationTags">
                 <button type="button" class="pTags">Change Tags</button>
             </div>
@@ -29,22 +45,12 @@
         </div>
         <div class="publication">
             <div class="publicationTitle"><p class="pTitle">Title</p></div>
-            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>
+<!--            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>-->
             <div class="publicationTags">
                 <button type="button" class="pTags">Change Tags</button>
             </div>
             <div class="publicationStatistics">
-                <button type="button" class="pStatistics">Statistics</button>
-            </div>
-        </div>
-        <div class="publication">
-            <div class="publicationTitle"><p class="pTitle">Title</p></div>
-            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>
-            <div class="publicationTags">
-                <button type="button" class="pTags">Change Tags</button>
-            </div>
-            <div class="publicationStatistics">
-                <button type="button" class="pStatistics">Statistics</button>
+                <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
             </div>
         </div>
     </div>
