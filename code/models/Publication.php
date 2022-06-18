@@ -4,18 +4,30 @@ namespace app\models;
 
 use app\core\App;
 use app\core\DbModel;
+use DateInterval;
+use DateTime;
 
 class Publication extends DbModel
 {
     public ?int $id;
     public string $body;
-    public string $subject;
     public bool $isPublic;
-    public ?string $password;
+    public string $password;
+    public string $link;
     public int $idUser;
+    public $createdAt;
+    public $expireAt;
 
     public function __construct()
     {
+        $this->isPublic = true;
+        $this->password = '';
+
+        $now = new DateTime();
+        $this->createdAt = $now->format('Y-m-d H:i:s');
+
+        $never = (clone $now)->add(new DateInterval("P1000Y"));
+        $this->expireAt = $never->format('Y-m-d H:i:s');
     }
 
 //    public function __construct1(string $body, string $subject, bool $isPublic, string $password, int $idUser)
@@ -34,7 +46,7 @@ class Publication extends DbModel
 
     static public function attributes(): array
     {
-        return ['idUser', 'body', 'subject', 'isPublic', 'password'];
+        return ['idUser', 'isPublic', 'password', 'body', 'link', 'createdAt', 'expireAt'];
     }
 
     static public function primaryKey(): string
@@ -84,22 +96,6 @@ class Publication extends DbModel
     }
 
     /**
-     * @return String
-     */
-    public function getSubject(): string
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @param String $subject
-     */
-    public function setSubject(string $subject): void
-    {
-        $this->subject = $subject;
-    }
-
-    /**
      * @return bool
      */
     public function isPublic(): bool
@@ -146,6 +142,57 @@ class Publication extends DbModel
     {
         $this->id = $id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpireAt()
+    {
+        return $this->expireAt;
+    }
+
+    /**
+     * @param mixed $expireAt
+     */
+    public function setExpireAt($expireAt): void
+    {
+        $this->expireAt = $expireAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLink(): string
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param string $link
+     */
+    public function setLink(string $link): void
+    {
+        $this->link = $link;
+    }
+
+
+
 
 
 }
