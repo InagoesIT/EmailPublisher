@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+use app\models\Publication;
 use Exception;
 use PDO;
 
@@ -61,6 +62,20 @@ abstract class DbModel extends Model
 			return null;
 		return $result;
 	}
+
+    public static function findAll()
+    {
+        $tableName = static::tableName();
+        $statement = self::prepare("SELECT * FROM $tableName");
+
+        $statement->execute();
+
+        $result[] = new Publication();
+        $result = $statement->fetchAll(PDO::FETCH_CLASS);
+        if (!$result)
+            return null;
+        return $result;
+    }
 
 	public static function prepare($sql)
 	{
