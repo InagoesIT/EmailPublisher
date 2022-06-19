@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+use app\models\Publication;
 use Exception;
 use PDO;
 
@@ -40,7 +41,7 @@ abstract class DbModel extends Model
 		}
 		catch (Exception $exception)
 		{
-            echo "nu vreau sa inserez si cu asta basta";
+//            echo "nu vreau sa inserez si cu asta basta";
 			return false;
 		}
 	}
@@ -62,10 +63,59 @@ abstract class DbModel extends Model
 		return $result;
 	}
 
+
     public static function count(): int
     {
         $tableName = static::tableName();
         $sql= self::prepare("SELECT * FROM $tableName");
+         $sql->execute();
+
+        return $sql->rowCount();
+    }
+
+    public static function findAll()
+    {
+        $tableName = static::tableName();
+        $statement = self::prepare("SELECT * FROM $tableName");
+
+        $statement->execute();
+
+        $result[] = new Publication();
+        $result = $statement->fetchAll(PDO::FETCH_CLASS);
+        if (!$result)
+            return null;
+        return $result;
+    }
+
+    public static function getPublicationProprietyByLink($property, $link) {
+        $query="SELECT $property FROM publications where link like '$link%'";
+        $statement=self::prepare($query);
+        $statement->execute();
+        if($statement->rowCount()==1){
+            $row=$statement->fetch();
+            return $row[$property];
+        }
+        return NULL;
+    }
+
+    public static function getPublicationProprietyByUserId($property, $id)
+    {
+        $query="SELECT * FROM publications where idUser = $id";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        $it = 0;
+        while ($row=$statement->fetch()) {
+            $result[$it] = $row['link'];
+            $it++;
+        }
+
+        return $result;
+    }
+
+    public static function countPublicationOfUser($id): int
+    {
+        $sql= self::prepare("SELECT * FROM publications where idUser = $id");
         $sql->execute();
 
         return $sql->rowCount();

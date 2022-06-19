@@ -4,6 +4,9 @@ namespace app\controllers;
 
 use app\core\App;
 use app\core\Database;
+use app\core\Request;
+use app\core\Response;
+use app\core\Router;
 use app\models\Publication;
 use DateInterval;
 use DateTime;
@@ -40,10 +43,11 @@ class MailController extends Controller
             $user= new User();
             $user->setEmail($senderAddress);
             $user->setIsActive(true);
-//            $user->generateToken();     // TODO generate token
+            $user->generateToken();
+
             $user->save();
 
-            $pub->setIdUser($user->getId());
+            $pub->setIdUser(User::findOne(['email' => $senderAddress])->id);
         }
         else
             $pub->setIdUser(User::getUserIdByEmail($senderAddress));
@@ -51,7 +55,7 @@ class MailController extends Controller
 
 	public static function configureMail($mail)
 	{
-		$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+		$mail->SMTPDebug = 0;
 		$mail->isSMTP();
 		$mail->Host = 'smtp.gmail.com';
 		$mail->SMTPAuth = true;
@@ -147,30 +151,47 @@ class MailController extends Controller
 
     public function processInbox()
     {
-        $pub = new Publication();
         $mails = $this->setupInbox();
-        if ($mails !== NULL)
+        if ($mails != NULL)
             foreach ($mails as $msg_number) {
+                $pub = new Publication();
                 $this->checkUser($pub, $msg_number);
                 $goodMail = $this->checkSubject($pub, $msg_number);
 
-                $pub->setBody(imap_fetchbody($this->conn, $msg_number, "2"));
+//                $pub->setBody(htmlspecialchars(imap_fetchbody($this->conn, $msg_number, "2")));
+//                $my_mail = imap_body($this->conn, $msg_number);
+
+
+                $link = md5(uniqid(), false);
+                $pub->setLink($link);
+
+                $my_print = imap_fetchbody($this->conn, $msg_number, 2);
+                $path="../../publications/{$link}.html";
+                file_put_contents($path, $my_print);
+                $pub->setBody($path);
+
+                // TODO comment the line below
 //                imap_clearflag_full($this->conn, $msg_number, "\\Seen");
-                $pub->setLink($_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/" . md5(uniqid(), false));
 
                 $header = imap_headerinfo($this->conn, $msg_number);
                 $senderAddress = $header->sender[0]->mailbox . '@' . $header->sender[0]->host;
 
-                if ($goodMail == self::VALID_SUBJECT) {    // TODO publication link
+                if ($goodMail == self::VALID_SUBJECT) {
                     $pub->save();
+
+
+                    // TODO uncomment sendMail()
                     $this->sendMail($senderAddress, $goodMail,
                         "Thank you for publishing your mail. <br>
-                        Your publication can be found at {$pub->getLink()} until {$pub->getExpireAt()} using password {$pub->getPassword()}.<br>
+                        Your publication can be found at <a href='https://680a-46-97-169-19.eu.ngrok.io/publication/{$pub->getLink()}'>This link</a> until {$pub->getExpireAt()} using password {$pub->getPassword()}.<br>
                         Have a wonderful day!");
                 }
                 else
                     $this->sendMail($senderAddress, $goodMail,
                         "We are sorry to inform you, your mail was not published.");
             }
+
+        // TODO uncomment line below when automated
+//        echo "<script>window.close();</script>";
     }
 }
