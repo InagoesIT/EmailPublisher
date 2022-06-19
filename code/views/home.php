@@ -1,4 +1,7 @@
-<?php use app\core\App; ?>
+<?php
+use app\core\App;
+use app\models\Publication;
+?>
 
 <header>
     <div class="headerText">
@@ -16,42 +19,27 @@
 <main>
     <div class="hline"></div>
     <div class="innertube">
-        <h2>Your publications:</h2>
-        <div class="publication">
-            <div class="publicationTitle"><p class="pTitle">Title</p></div>
-<!--            <div class="publicationLink"><a class="pLink" href="https://www.youtube.com"></a></div>-->
-            <div class="publicationTags">
-                <button type="button" class="pTags">Change Tags</button>
+        <?php
+        $count = Publication::countPublicationOfUser(App::$app->user->getId());
+        if ($count > 0) {
+            echo "<h2> Your publications:</h2>";
+            $p = Publication::getPublicationProprietyByUserId('link', App::$app->user->getId());
+        }
+        else
+            echo "<h2>No publications</h2>";
+        for($i = 0; $i < $count ; $i++): ?>
+            <div class="publication">
+<!--                TODO: HARD CODED LINK !!!-->
+                <div class="publicationLink">
+                    <a class="pLink" href="<?php echo "https://680a-46-97-169-19.eu.ngrok.io/publication/" . $p[$i] ?>"><?php echo $p[$i] ?></a>
+                </div>
+                <div class="publicationTags">
+                    <button type="button" class="pTags">Change Tags</button>
+                </div>
+                <div class="publicationStatistics">
+                    <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
+                </div>
             </div>
-
-
-
-            <div class="publicationStatistics">
-                <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
-            </div>
-
-
-
-        </div>
-        <div class="publication">
-            <div class="publicationTitle"><p class="pTitle">Title</p></div>
-<!--            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>-->
-            <div class="publicationTags">
-                <button type="button" class="pTags">Change Tags</button>
-            </div>
-            <div class="publicationStatistics">
-                <button type="button" class="pStatistics">Statistics</button>
-            </div>
-        </div>
-        <div class="publication">
-            <div class="publicationTitle"><p class="pTitle">Title</p></div>
-<!--            <div class="publicationLink"><a class="pLink" href="Link">Link</a></div>-->
-            <div class="publicationTags">
-                <button type="button" class="pTags">Change Tags</button>
-            </div>
-            <div class="publicationStatistics">
-                <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
-            </div>
-        </div>
+        <?php endfor; ?>
     </div>
 </main>
