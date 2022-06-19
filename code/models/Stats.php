@@ -10,6 +10,7 @@ class Stats extends DbModel
     public int $idPublication;
     public string $country;
     public $viewTime;
+    public static int $ok=0;
 
     public function __construct()
     {
@@ -56,7 +57,41 @@ class Stats extends DbModel
         return $resultArray;
 
     }
+    static public function getCountries(int $idPublication): array
+    {
+        $query="SELECT distinct(country) FROM stats where idPublication=$idPublication";
+        $statement=self::prepare($query);
+        $statement->execute();
 
+        $arrayCountries= array();
+        $i=0;
+        $keys=array();
+        if ($statement->rowCount() > 0) {
+            while($row=$statement->fetch()) {
+                $key=$row['country'];
+                $value=self::getCountByCountry($key);
+                echo "value =" . $value . "<br>";
+
+                $keys[$i]=$key;
+                $i++;
+                array_push($arrayCountries, $key, $value);
+
+
+            }
+
+        }
+        //return array_unique($arrayCountries);
+        return $arrayCountries;
+
+    }
+    static public function getCountByCountry($country): int
+    {
+        $query="SELECT * FROM stats where country='$country'";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        return $statement->rowCount();
+    }
 
     /**
      * @return int

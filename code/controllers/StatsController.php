@@ -22,6 +22,10 @@ class StatsController extends Controller
         echo self::$endDate;
     }
 
+    public function setData(){
+
+
+    }
     public static function filterArrayByDates($value): bool
     {
         if($value >= self::$startDate & $value <= self::$endDate){
@@ -30,7 +34,16 @@ class StatsController extends Controller
         return false;
     }
     public function stats(){
-
+        if( isset($_POST['endDate']) & isset($_POST['startDate'])){
+            echo "acum setez ";
+            self::$startDate=$_POST['startDate'];
+            self::$endDate=$_POST['endDate'];
+            $session = App::$app->session;
+            $session->set("startDate", $_POST['startDate']);
+            $session->set("endDate", $_POST['endDate']);
+        }else{
+            self::$nrViews=0;
+        }
         $myArray=array();
 
         $myArray=Stats::findByIdPublication(1);
@@ -53,12 +66,13 @@ class StatsController extends Controller
         echo "start = ". $session->get("startDate");
         for($i=0; $i<count($myArray); $i++){
             preg_replace('T', " ", $myArray[$i]);
-            if($myArray[$i] >= $session->get("startDate") || $myArray[$i] <=self::$endDate ){
+            if($myArray[$i] >= $session->get("startDate") && $myArray[$i] <= $session->get("endDate") ){
                 self::$nrViews++;
             }
         }
 
         echo  "nr de elemente filtrate ". self::$nrViews;
+
 
 
         return $this::render('stats');

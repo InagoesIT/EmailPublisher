@@ -1,13 +1,18 @@
 <?php use app\core\App; ?>
 <?php use app\controllers\StatsController; ?>
+<?php use app\models\Publication; ?>
+<?php use app\models\Stats; ?>
 <?php
-if( isset($_POST['endDate']) & isset($_POST['startDate'])){
-    echo "acum setez ";
-    StatsController::$startDate=$_POST['startDate'];
-    StatsController::$endDate=$_POST['endDate'];
-    $session = App::$app->session;
-    $session->set("startDate", $_POST['startDate']);
-    $session->set("endDate", $_POST['endDate']);
+$count = Publication::count();
+$languageArray = array();
+$countArray = array();
+
+$arrayCountries = Stats::getCountries(1);
+
+var_dump($arrayCountries);
+echo "<br>";
+foreach ($arrayCountries as $k => $v) {
+    echo "\$a[$k] => $v.\n";
 }
 ?>
 <div class="appBar" id="appBar">
@@ -22,29 +27,77 @@ if( isset($_POST['endDate']) & isset($_POST['startDate'])){
     <form method="post" class="firstRow">
         <div class="column1">
             <label for="startDate" class="selecting1">Select start date:</label>
-            <input type="datetime-local" id="startDate" name="startDate" class="date"  value="startDate" >
+            <input type="datetime-local" id="startDate" name="startDate" class="date" value="startDate">
         </div>
         <div class="column2">
             <label for="endDate" class="selecting2">Select end date:</label>
-            <input type="datetime-local" id="endDate" name="endDate" class="date" >
+            <input type="datetime-local" id="endDate" name="endDate" class="date">
         </div>
-        <input type="submit" value="Submit" class="GenerateButton"  >
+        <input type="submit" value="Submit" class="GenerateButton">
     </form>
 </div>
 <hr>
 <div class="FirstStatsPlace">
-    <p class="Text2">Number of views: <?php echo StatsController::$nrViews?> </p>
+    <p class="Text2">Number of views: <?php echo StatsController::$nrViews ?> </p>
     <p class="Text3"> The origin country for the visitors:</p>
-    <img src="images/diagram.png" alt="diagram1" class="image1">
+    <p class="Text5">The visitors diagram:</p>
+
+    <div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            console.log("1");
+            google.load('visualization', '1', {packages: ['corechart'], callback: drawChart});
+            console.log("2");
+
+            google.setOnLoadCallback(drawChart);
+            console.log("3");
+
+            function drawChart(callback) {
+                console.log("4");
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                let count = '<?= $count ?>';
+                let array =<?php echo json_encode($arrayCountries); ?>;
+                for (let key = 0; key < array.length; key += 2) {
+                    data.addRows([
+                        [array[key], array[key + 1]],
+                    ]);
+                }
+                console.log("5");
+
+                var options = {
+                    'width': 400,
+                    'height': 400
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+
+
+
+            }
+
+        </script>
+
+        <div id="content">
+            <div id="chart_div"></div>
+        </div>
+    </div>
+
+
     <div class="ExportRow">
         <p class="Text4">Export as:</p>
-        <form>
+        <form method="post">
             <label for="types"></label>
             <select name="types" id="types" class="exportOptions">
                 <option value="pdf">PDF</option>
                 <option value="html">HTML</option>
                 <option value="xml">XML</option>
             </select>
+            <input type="submit" value="Submit" class="GenerateButton" id="save-pdf">
         </form>
     </div>
 </div>
@@ -64,7 +117,76 @@ if( isset($_POST['endDate']) & isset($_POST['startDate'])){
 <hr>
 <div class="SecondStatsPlace">
     <p class="Text5">The visitors diagram:</p>
-    <img src="images/diagram.png" alt="diagram2" class="image1">
+    <div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            console.log("1");
+            google.load('visualization', '1', {packages: ['corechart'], callback: drawChart});
+            console.log("2");
+
+            google.setOnLoadCallback(drawChart);
+            console.log("3");
+
+            function drawChart() {
+                console.log("4");
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+
+                let data1;
+                $.ajax({
+                    type: 'POST',
+                    dataType: "json",
+                    url: 'test.php',
+                    data:
+                    success
+            :
+
+                function (data1) {
+                    try {
+                        data1 = JSON.parse(data1);
+                        console.log(data1);
+                        document.write(1000);
+                    } catch (e) {
+                        window.alert(5 + 6);
+                    }
+                    console.log(data1);
+                    document.write(2000);
+                }
+            })
+
+
+                //for(let i=0;i<)
+                data.addRows([
+                    ['Mushrooms', 3],
+                    ['Onions', 1],
+                    ['Olives', 1],
+                    ['Zucchini', 1],
+                    ['Pepperoni', 2]
+                ]);
+                console.log("5");
+
+                var options = {
+                    'title': 'How Much Pizza I Ate Last Night ana',
+                    'width': 400,
+                    'height': 300
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+                console.log("6");
+
+            }
+
+            console.log("7");
+
+        </script>
+        <div id="content">
+            <div id="chart_div"></div>
+        </div>
+    </div>
     <div class="ExportRow">
         <p class="Text4">Export as:</p>
         <form>
@@ -77,3 +199,4 @@ if( isset($_POST['endDate']) & isset($_POST['startDate'])){
         </form>
     </div>
 </div>
+
