@@ -43,8 +43,7 @@ class MailController extends Controller
             $user= new User();
             $user->setEmail($senderAddress);
             $user->setIsActive(true);
-//            $user->generateToken();     // TODO generate token
-            $user->setToken('123456789');
+            $user->generateToken();
 
             $user->save();
 
@@ -152,10 +151,10 @@ class MailController extends Controller
 
     public function processInbox()
     {
-        $pub = new Publication();
         $mails = $this->setupInbox();
         if ($mails != NULL)
             foreach ($mails as $msg_number) {
+                $pub = new Publication();
                 $this->checkUser($pub, $msg_number);
                 $goodMail = $this->checkSubject($pub, $msg_number);
 
@@ -163,13 +162,9 @@ class MailController extends Controller
 //                $my_mail = imap_body($this->conn, $msg_number);
 
 
-
-
                 $link = md5(uniqid(), false);
                 $pub->setLink($link);
 
-                // TODO change path to relative to project
-//                $my_print= imap_body($this->conn, $msg_number);
                 $my_print = imap_fetchbody($this->conn, $msg_number, 2);
                 $path="../../publications/{$link}.html";
                 file_put_contents($path, $my_print);
@@ -188,7 +183,7 @@ class MailController extends Controller
                     // TODO uncomment sendMail()
                     $this->sendMail($senderAddress, $goodMail,
                         "Thank you for publishing your mail. <br>
-                        Your publication can be found at {$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/publication/{$pub->getLink()} until {$pub->getExpireAt()} using password {$pub->getPassword()}.<br>
+                        Your publication can be found at <a href='https://680a-46-97-169-19.eu.ngrok.io/publication/{$pub->getLink()}'>This link</a> until {$pub->getExpireAt()} using password {$pub->getPassword()}.<br>
                         Have a wonderful day!");
                 }
                 else

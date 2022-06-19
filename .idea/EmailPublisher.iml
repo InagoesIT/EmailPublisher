@@ -34,6 +34,7 @@
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/phpoption/phpoption" />
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/code/vendor/graham-campbell/result-type" />
+      <excludeFolder url="file://$MODULE_DIR$/code/vendor/phpmailer/phpmailer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
