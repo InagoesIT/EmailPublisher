@@ -61,6 +61,7 @@ main {
 .pLink {
     font-family: 'Roboto Mono Light', monospace;
     font-size: 12px;
+    width: auto;
 }
 
 .pStatistics, .pTags {

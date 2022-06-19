@@ -41,7 +41,7 @@ abstract class DbModel extends Model
 		}
 		catch (Exception $exception)
 		{
-            echo "nu vreau sa inserez si cu asta basta";
+//            echo "nu vreau sa inserez si cu asta basta";
 			return false;
 		}
 	}
@@ -86,6 +86,29 @@ abstract class DbModel extends Model
             return $row[$property];
         }
         return NULL;
+    }
+
+    public static function getPublicationProprietyByUserId($property, $id)
+    {
+        $query="SELECT * FROM publications where idUser = $id";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        $it = 0;
+        while ($row=$statement->fetch()) {
+            $result[$it] = $row['link'];
+            $it++;
+        }
+
+        return $result;
+    }
+
+    public static function countPublicationOfUser($id): int
+    {
+        $sql= self::prepare("SELECT * FROM publications where idUser = $id");
+        $sql->execute();
+
+        return $sql->rowCount();
     }
 
 	public static function prepare($sql)
