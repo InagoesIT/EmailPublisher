@@ -93,7 +93,7 @@ class App
 		$this->router->get('/logout', [AuthController::class, 'logout']);
 
         $this->router->get('/stats',[StatsController::class, 'print'] );
-        $this->router->post('/stats',[StatsController::class, 'operatiune'] );
+        $this->router->post('/stats',[StatsController::class, 'stats'] );
 
 
         // TEST ONLY

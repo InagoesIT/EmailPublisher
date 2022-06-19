@@ -63,6 +63,16 @@ abstract class DbModel extends Model
 		return $result;
 	}
 
+
+    public static function count(): int
+    {
+        $tableName = static::tableName();
+        $sql= self::prepare("SELECT * FROM $tableName");
+         $sql->execute();
+
+        return $sql->rowCount();
+    }
+
     public static function findAll()
     {
         $tableName = static::tableName();
