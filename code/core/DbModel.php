@@ -121,6 +121,13 @@ abstract class DbModel extends Model
         return $sql->rowCount();
     }
 
+    public static function updatePublication($property, $value, $link) {
+        $query= "UPDATE publications SET " . $property  . "=" . "'" . $value  . "'" . " where " . "link" . "=" . "'" . $link  . "'";
+        echo $query;
+        $statement=self::prepare($query);
+        $statement->execute();
+    }
+
 	public static function prepare($sql)
 	{
 		return App::$app->db->pdo->prepare($sql);

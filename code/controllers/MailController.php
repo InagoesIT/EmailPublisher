@@ -91,33 +91,44 @@ class MailController extends Controller
                         $pub->setCreatedAt($createdAt->format('Y-m-d H:i:s'));
 
                         $duration = preg_split("/[dhm]/", $tag[1]);
-                        if (strpos($tag[1], "d") > strpos($tag[1], "h") ||
-                            strpos($tag[1], "d") > strpos($tag[1], "m") ||
-                            strpos($tag[1], "h") > strpos($tag[1], "m"))
-                            return self::INVALID_SUBJECT;
-                        else {
-                            echo "<br>";
-                            if (str_contains($tag[1], "d") && str_contains($tag[1], "h") && str_contains($tag[1], "m")) {
-                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H{$duration[2]}M"));
-                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
-                            }
-                            else if (str_contains($tag[1], "d") && str_contains($tag[1], "h")) {
-                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H"));
-                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
-                            }
-                            else if (str_contains($tag[1], "d") && str_contains($tag[1], "m")) {
-                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}M"));
-                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
-                            }
-                            else if (str_contains($tag[1], "h") && str_contains($tag[1], "m")) {
-                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}H{$duration[1]}M"));
-                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
-                            }
-                            else if (str_contains($tag[1], "m")) {
-                                $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}M"));
-                                $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
-                            }
+
+                        echo "<br>";
+                        if (str_contains($tag[1], "d") && str_contains($tag[1], "h") && str_contains($tag[1], "m") &&
+                                strpos($tag[1], "d") < strpos($tag[1], "h") &&
+                                strpos($tag[1], "h") < strpos($tag[1], "m")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H{$duration[2]}M"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
                         }
+                        else if (str_contains($tag[1], "d") && str_contains($tag[1], "h") &&
+                                strpos($tag[1], "d") < strpos($tag[1], "h")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}H"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else if (str_contains($tag[1], "d") && str_contains($tag[1], "m") &&
+                                strpos($tag[1], "d") < strpos($tag[1], "m")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}D{$duration[1]}M"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else if (str_contains($tag[1], "h") && str_contains($tag[1], "m") &&
+                                strpos($tag[1], "h") < strpos($tag[1], "m")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}H{$duration[1]}M"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else if (str_contains($tag[1], "d")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("P{$duration[0]}D"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else if (str_contains($tag[1], "h")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}H"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else if (str_contains($tag[1], "m")) {
+                            $modified = (clone $createdAt)->add(new DateInterval("PT{$duration[0]}M"));
+                            $pub->setExpireAt($modified->format('Y-m-d H:i:s'));
+                        }
+                        else
+                            return self::INVALID_SUBJECT;
+
                         break;
                     case "[public]":
                         $pub->setIsPublic(true);
@@ -192,6 +203,6 @@ class MailController extends Controller
             }
 
         // TODO uncomment line below when automated
-//        echo "<script>window.close();</script>";
+        echo "<script>window.close();</script>";
     }
 }
