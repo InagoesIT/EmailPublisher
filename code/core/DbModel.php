@@ -77,6 +77,17 @@ abstract class DbModel extends Model
         return $result;
     }
 
+    public static function getPublicationProprietyByLink($property, $link) {
+        $query="SELECT $property FROM publications where link like '$link%'";
+        $statement=self::prepare($query);
+        $statement->execute();
+        if($statement->rowCount()==1){
+            $row=$statement->fetch();
+            return $row[$property];
+        }
+        return NULL;
+    }
+
 	public static function prepare($sql)
 	{
 		return App::$app->db->pdo->prepare($sql);

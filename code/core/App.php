@@ -104,7 +104,8 @@ class App
         if ($publications != NULL)
             foreach ($publications as $pub) {
                 $link = $pub->link;
-                $this->router->get('/publication/' . $link, [PublishController::class, 'getPublish']);
+                $this->router->get('/publication/' . $link, [PublishController::class, 'print']);
+                $this->router->post('/publication/' . $link, [PublishController::class, 'getPublish']);
             }
 	}
 }
