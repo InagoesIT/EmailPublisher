@@ -71,6 +71,8 @@ class Stats extends DbModel
 //    }
     static public function getCountries(int $idPublication): array
     {
+        $startDate=\date('Y-m-d H:i:s', strtotime(StatsController::$startDate));
+        $endDate=\date('Y-m-d H:i:s', strtotime(StatsController::$endDate));
         $query="SELECT distinct(country), viewTime FROM stats where idPublication=$idPublication";
         $statement=self::prepare($query);
         $statement->execute();
@@ -82,12 +84,10 @@ class Stats extends DbModel
             while($row=$statement->fetch()) {
                 $key=$row['country'];
                 $value=self::getCountByCountry($key);
-//                echo "value =" . $value . "<br>";
-
                 $keys[$i]=$key;
                 $i++;
                 $time= $row['viewTime'];
-                if(  $time <= StatsController::$endDate && $time >= StatsController::$startDate )
+                if(  $time <= $endDate && $time >= $startDate )
                 {
                     array_push($arrayCountries, $key, $value);
                 }
@@ -95,9 +95,7 @@ class Stats extends DbModel
             }
 
         }
-        //return array_unique($arrayCountries);
         return $arrayCountries;
-
     }
 
     public static function getCountByDay($day){
@@ -216,7 +214,9 @@ class Stats extends DbModel
 
     static public function getCountByCountry($country): int
     {
-        $query="SELECT * FROM stats where country='$country'";
+        $startDate=\date('Y-m-d H:i:s', strtotime(StatsController::$startDate));
+        $endDate=\date('Y-m-d H:i:s', strtotime(StatsController::$endDate));
+        $query="SELECT * FROM stats where country='$country'  and viewTime>='$startDate' and viewTime <= '$endDate'";
         $statement=self::prepare($query);
         $statement->execute();
 
