@@ -34,7 +34,7 @@ use app\models\Publication;
                     <a class="pLink" href="<?php echo "https://680a-46-97-169-19.eu.ngrok.io/publication/" . $p[$i] ?>"><?php echo $p[$i] ?></a>
                 </div>
                 <div class="publicationTags">
-                    <button type="button" class="pTags">Change Tags</button>
+                    <button type="button" class="pTags" onclick="window.location.href='<?php echo "https://680a-46-97-169-19.eu.ngrok.io/publication/" . $p[$i] . "/changeTags" ?>';">Change Tags</button>
                 </div>
                 <div class="publicationStatistics">
                     <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
