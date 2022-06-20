@@ -32,7 +32,7 @@ class View
 		return ob_get_clean();
 	}
 
-	protected function renderViewOnly($view, $params = [])
+	public function renderViewOnly($view, $params = [])
 	{
 		//pass all the params to the view
 		foreach ($params as $key => $value)
