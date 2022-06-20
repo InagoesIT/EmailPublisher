@@ -9,9 +9,11 @@ use Cassandra\Time;
 
 class StatsController extends Controller
 {
-    public static  $startDate;
-    public static  $endDate;
+    public static $startDate;
+    public static $endDate;
     public static int  $nrViews=0;
+    public static int $startHour;
+    public static int $nrDays;
 
 
     public function print(){
@@ -22,10 +24,6 @@ class StatsController extends Controller
         echo self::$endDate;
     }
 
-    public function setData(){
-
-
-    }
     public static function filterArrayByDates($value): bool
     {
         if($value >= self::$startDate & $value <= self::$endDate){
@@ -33,17 +31,72 @@ class StatsController extends Controller
         }
         return false;
     }
+
+//    public static function generateTimeStats(){
+//
+//        $hourArray=array();
+//
+//        if(  isset($_POST['endDate']) & isset($_POST['startDate'])  ){
+//            $myStartDate=new \DateTime(date('Y-m-d h:i:s', strtotime(self::$startDate)));
+//            $myEndDate=new \DateTime(date('Y-m-d h:i:s', strtotime(self::$endDate)));
+//
+//            $interval = $myEndDate->diff($myStartDate);
+//            self::$nrDays = $interval->format('%a');
+//            echo self::$nrDays . " zile ";
+//
+//            if(self::$nrDays >= 1){
+//                ////TODO am cel putin 24 de ore => fac diagrama pe zile
+//
+//            }
+//            if(self::$nrDays == 0){
+//                ////TODO am cel mult 23 de ore => fac diagrama pe ore
+//                /// TODO trebuie sa construiesc un array , ora -> nr de views , column diagram
+//                /// merg in start date si obtin ora de la care plecam , merg in endDate si obtin ora la care ne
+//                /// oprim, apoi verificam in baza de date daca avem intrare la ora respectiva , dar respectand <endTime, > startTime
+//                /// si punem in array ora cu nr views, daca nu punem ora cu 0
+//                ///
+//
+//                self::$startHour=\date('h', strtotime(self::$startDate));
+//                $endHour=\date('H', strtotime(self::$endDate));
+//               // echo "ora de start =" . self::$startHour . " ora de final  " . $endHour;
+//
+//
+//
+//                for($i=self::$startHour ; $i<=$endHour; $i++){
+//                    //echo " i = " . $i . "<br>";
+//                    //TODO verificam in baza de date daca sunt publicatii la ora asta2
+//
+//                    //echo"pentru ora " . $i .  Stats::getNrViewsAtHour($i) . "views " .  "<br>";
+//                    $hourArray += [ "$i" => Stats::getNrViewsAtHour($i) ];
+//                    //echo "<br>". "valoare" . $hourArray[$i].  "<br>";
+//                    //echo key($hourArray);
+//                    //next($hourArray);
+//
+//
+//                }
+//            }
+//            if(self::$nrDays >= 31){
+//                ////TODO am cel putin 1 luna  => fac diagrama pe luni
+//
+//
+//            }
+//
+//            return $hourArray;
+//        }
+//    }
+
     public function stats(){
+        $session = App::$app->session;
         if( isset($_POST['endDate']) & isset($_POST['startDate'])){
             echo "acum setez ";
             self::$startDate=$_POST['startDate'];
             self::$endDate=$_POST['endDate'];
-            $session = App::$app->session;
             $session->set("startDate", $_POST['startDate']);
             $session->set("endDate", $_POST['endDate']);
         }else{
             self::$nrViews=0;
         }
+
         $myArray=array();
 
         $myArray=Stats::findByIdPublication(1);
@@ -51,29 +104,15 @@ class StatsController extends Controller
         echo "time o " . $myArray[0] . "<br>";
         echo "time 1 " . $myArray[1] ."<br>";
 
-//        for($i=0; $i<count($myArray); $i++){
-//            echo "- " . $myArray[$i];
-//            $myArray[$i]=date('y-m-d',$myArray[$i]);
-//            echo "+ " . $myArray[$i];
-//        }
-//        $filteredArray=array_filter($myArray, function ($value){
-//            if($value >= self::$startDate & $value <= self::$endDate){
-//                return true;
-//            }
-//            return false;
-//        });
         $session = App::$app->session;
         echo "start = ". $session->get("startDate");
         for($i=0; $i<count($myArray); $i++){
-            preg_replace('T', " ", $myArray[$i]);
-            if($myArray[$i] >= $session->get("startDate") && $myArray[$i] <= $session->get("endDate") ){
+            if($myArray[$i] >= date('Y-m-d h:i:s', strtotime($session->get("startDate"))) && $myArray[$i] <= date('Y-m-d h:i:s', strtotime($session->get("endDate"))) ){
                 self::$nrViews++;
             }
         }
 
         echo  "nr de elemente filtrate ". self::$nrViews;
-
-
 
         return $this::render('stats');
     }

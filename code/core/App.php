@@ -106,8 +106,13 @@ class App
                 $this->router->get('/publication/' . $link, [PublishController::class, 'print']);
                 $this->router->post('/publication/' . $link, [PublishController::class, 'getPublish']);
 
+//                $this->router->get('/publication/' . $link . '/stats', [StatsController::class, 'print']);
+//                $this->router->post('/publication/' . $link . '/stats', [StatsController::class, 'stats']);
+
+
                 $this->router->get('/publication/' . $link . '/changeTags', [PublishController::class, 'printChangeTags']);
                 $this->router->post('/publication/' . $link . '/changeTags', [PublishController::class, 'changeTags']);
+
             }
 	}
 }
