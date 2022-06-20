@@ -38,7 +38,7 @@ use app\models\Publication;
                 </div>
                 <div class="publicationStatistics">
                     <button type="button" class="pStatistics" onclick="window.location.href='<?php echo "https://680a-46-97-169-19.eu.ngrok.io/publication/" . $p[$i] . "/stats" ?>'">Statistics</button>
-            </div>
+                </div>
             </div>
         <?php endfor; ?>
     </div>
