@@ -1,15 +1,3 @@
-<!--<html>-->
-<!--<body>-->
-<!---->
-<!--<form method="post">-->
-<!--    New Visibility: <input type="text" id="visibility" name="visibility"><br>-->
-<!--    New Password: <input type="text" id="password" name="password"><br>-->
-<!--    New Duration: <input type="text" id="duration" name="duration"><br>-->
-<!--    <input type="submit">-->
-<!--</form>-->
-<!---->
-<!--</body>-->
-<!--</html>-->
 <style>
 html {
 height: 100%;

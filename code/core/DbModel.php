@@ -123,7 +123,7 @@ abstract class DbModel extends Model
 
     public static function updatePublication($property, $value, $link) {
         $query= "UPDATE publications SET " . $property  . "=" . "'" . $value  . "'" . " where " . "link" . "=" . "'" . $link  . "'";
-        echo $query;
+//        echo $query;
         $statement=self::prepare($query);
         $statement->execute();
     }

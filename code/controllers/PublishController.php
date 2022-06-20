@@ -77,6 +77,7 @@ class PublishController extends Controller
             if (self::$visibility == 'private')
                 DbModel::updatePublication('isPublic', 0, $id);
         }
+        echo '<script type="text/JavaScript"> window.location.href="/"; </script>';
     }
 
     public function getPublish()
