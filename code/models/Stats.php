@@ -82,7 +82,7 @@ class Stats extends DbModel
             while($row=$statement->fetch()) {
                 $key=$row['country'];
                 $value=self::getCountByCountry($key);
-                echo "value =" . $value . "<br>";
+//                echo "value =" . $value . "<br>";
 
                 $keys[$i]=$key;
                 $i++;
@@ -104,7 +104,7 @@ class Stats extends DbModel
         $startDate=\date('Y-m-d H:i:s', strtotime(StatsController::$startDate));
         $endDate=\date('Y-m-d H:i:s', strtotime(StatsController::$endDate));
         $query="SELECT * FROM stats WHERE viewTime LIKE '%-%-$day%' and viewTime>='$startDate' and viewTime <= '$endDate'";
-        echo $query;
+//        echo $query;
         $statement=self::prepare($query);
         $statement->execute();
 
@@ -118,14 +118,14 @@ class Stats extends DbModel
 
         if(  isset($_POST['endDate']) & isset($_POST['startDate'])  ){
 
-            echo "INTRU UNDE AM SETAT VARS ";
+//            echo "INTRU UNDE AM SETAT VARS ";
             $myStartDate=new \DateTime(date('Y-m-d h:i:s', strtotime(StatsController::$startDate)));
             $myEndDate=new \DateTime(date('Y-m-d h:i:s', strtotime(StatsController::$endDate)));
 
             $interval = $myEndDate->diff($myStartDate);
             $nrDays = $interval->format('%a');
             self::$nrDays=$nrDays;
-            echo $nrDays . " zile ";
+//            echo $nrDays . " zile ";
 
 
             if($nrDays >= 1){
@@ -137,9 +137,9 @@ class Stats extends DbModel
 
                 self::$startDay=date('d', strtotime($startDay));
                 while ($startDay  != $endDay){
-                    echo "start " . $startDay;
+//                    echo "start " . $startDay;
 
-                    echo "my end date " . $endDay;
+//                    echo "my end date " . $endDay;
 
                     $mySearchDay=date('d', strtotime($startDay));
 
@@ -149,7 +149,7 @@ class Stats extends DbModel
                     ////trebuie sa vad in baza de date daca corespunde
 
                     $startDay=date('Y-m-d H:i:s', strtotime($startDay. '+1 day'));
-                    echo ' noua zi : ' .  $startDay . "<br>";
+//                    echo ' noua zi : ' .  $startDay . "<br>";
 //
                     $dayArray+=[ "$mySearchDay" => self::getCountByDay($mySearchDay) ];
 
@@ -206,7 +206,7 @@ class Stats extends DbModel
         $startDate=\date('Y-m-d H:i:s', strtotime(StatsController::$startDate));
         $endDate=\date('Y-m-d H:i:s', strtotime(StatsController::$endDate));
         $query="SELECT * FROM stats WHERE viewTime LIKE '%$hour:%:%' and viewTime>='$startDate' and viewTime <= '$endDate'";
-        echo $query;
+//        echo $query;
         $statement=self::prepare($query);
         $statement->execute();
 

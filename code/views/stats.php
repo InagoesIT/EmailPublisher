@@ -1,3 +1,223 @@
+<style>
+    body {
+        background-color: #005226;
+        margin: 0px;
+    }
+    .appBar{
+        height: 150px;
+        width: 100%;
+        background-color: #BCCE98;
+        margin:0;
+        padding:0;
+        display: flex;
+
+    }
+    .logoPlace{
+        width: 160px;
+        /*background-color: #C4C4C4;*/
+
+    }
+    .title{
+        font-size: 35px;
+        font-weight: bold;
+        font-family: 'Roboto Mono Light', monospace;
+        text-align: center;
+        float: left;
+        margin-left: 20px;
+    }
+    .button{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 21px;
+        font-weight: bold;
+        color: #005226;
+        background-color: #fff;
+        height: 60px;
+        width: 200px;
+        border-radius: 15px;
+        border-color: #005226;
+        margin-top: 40px;
+        margin-left: 10%;
+
+    }
+
+    .firstRow{
+        height: 180px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .text1{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 30px;
+        color: #fff;
+    }
+    .selecting1{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 23px;
+        color: #fff;
+        margin-left: 1%;
+    }
+    .selecting2{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 23px;
+        color: #fff;
+        margin-left: 1%;
+    }
+
+    .GenerateButton{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 25px;
+        color: black;
+        background-color: #BCCE98;
+        margin-left: 6%;
+        height: 65px;
+        border-radius: 10px;
+        border-color: yellow;
+    }
+    hr {
+        display: block;
+        border: 1px solid #BCCE98;
+    }
+    .FirstStatsPlace{
+        height: 900px;
+        background-color: #C4C4C4;
+        margin: 50px;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        align-content: center;
+        vertical-align: middle;
+        text-align: center;
+
+
+    }
+    .SecondStatsPlace{
+        height: 900px;
+        background-color: #C4C4C4;
+        margin: 50px;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        text-align: center;
+        padding-top: 30px;
+    }
+    .Text2{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 30px;
+        color: #042212;
+        padding-top: 50px;
+        padding-left: 50px;
+    }
+    .Text3{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 30px;
+        color: #042212;
+        padding-top: 20px;
+        padding-left: 50px;
+        padding-bottom: 20px;
+    }
+    .image1{
+        width: 750px;
+        padding-left: 50px;
+    }
+
+    .ExportRow{
+        display: flexbox;
+        margin-left: 50px;
+    }
+
+    .Text4{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 30px;
+        color: #042212;
+    }
+    .form2{
+        margin-left: 10%;
+    }
+
+    .SecondStatsPlace{
+        height: 900px;
+        background-color: #C4C4C4;
+        margin: 60px;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+    }
+    .column1{
+        padding-left: 6%;
+    }
+    .column2{
+        padding-left: 6%;
+    }
+    .date{
+        height: 50px;
+        border-radius: 15px;
+        font-size: 17px;
+        font-weight: bold;
+
+    }
+    .exportOptions{
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+        font-family: 'Roboto Mono Light', monospace;
+        color: #042212;
+        border-radius: 10px;
+        border-color: yellow;
+        font-weight: bold;
+    }
+    .Text5{
+        font-family: 'Roboto Mono Light', monospace;
+        font-size: 30px;
+        color: #042212;
+        padding-top: 50px;
+        padding-left: 50px;
+
+    }
+
+    @media screen and (max-width: 1100px) {
+        .image1{
+            width: 500px;
+        }
+        .text1{
+            font-size: 22px;
+        }
+        .title{
+            font-size: 30px;
+        }
+        .SecondStatsPlace{
+            height: 800px;
+        }
+        .FirstStatsPlace{
+            padding-top: 10px;
+            height: 800px;
+        }
+        .Text2{
+            padding-top: 30px;
+        }
+        .Text5{
+            padding-top: 80px;
+        }
+        .selecting1{
+            font-size: 20px ;
+        }
+        .selecting2{
+            font-size: 20px ;
+        }
+        .date{
+            width: 150px;
+        }
+        .column1{
+            padding-left: 4%;
+        }
+        .column2{
+            padding-left: 4%;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .image1{
+            width: 400px;
+        }
+    }
+</style>
 <?php use app\core\App; ?>
 <?php use app\controllers\StatsController; ?>
 <?php use app\models\Publication; ?>
@@ -7,34 +227,36 @@ $count = Publication::count();
 $languageArray = array();
 $countArray = array();
 
-$arrayCountries = Stats::getCountries(1);
+$link = $_SERVER['REQUEST_URI'];
+$pub = preg_split("[/]", $link);
+$pub = $pub[2];
+$id = Publication::getPublicationProprietyByLink('id', $pub);
+
+$arrayCountries = Stats::getCountries($id);
 
 $startDate=StatsController::$startDate;
 $endDate=StatsController::$endDate;
 
 $hourArray=Stats::generateTimeStats();
 
-$nrDays=Stats::$nrDays;
+$nrDays=3;
 
-echo "nr days =" . $nrDays;
+//echo "nr days =" . $nrDays;
 
 
 $startHour=\date('h', strtotime($startDate));
 $startDay=date('d', strtotime($startDate));
-echo " \n $startHour \n";
+//echo " \n $startHour \n";
 
-echo " HOUR ARRAY LENGTH = " . count($hourArray) ;
-
-foreach ($hourArray as $k => $v) {
-    echo "\$a[$k] => $v.\n";
-}
+//echo " HOUR ARRAY LENGTH = " . count($hourArray) ;
+//
+//foreach ($hourArray as $k => $v) {
+//    echo "\$a[$k] => $v.\n";
+//}
 
 ?>
 <div class="appBar" id="appBar">
-    <div class="logoPlace" id="logoPlace">
-        <img src="images/logo.png" alt="Logo" width="150px">
-    </div>
-    <p class="title" id="title"> Statistics for your email</p>
+    <p class="title" id="title" style="margin-left: 40%"> Statistics for your email</p>
 
 </div>
 <div class="firstRow">
@@ -184,7 +406,7 @@ foreach ($hourArray as $k => $v) {
                 let startDay = '<?= $startDay ?>';
 
                 let indexStart;
-                alert(parseInt(startHour));
+                // alert(parseInt(startHour));
 
                 let nrDays = '<?= $nrDays ?>';
 

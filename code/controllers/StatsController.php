@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\App;
+use app\models\Publication;
 use app\models\Stats;
 use Cassandra\Date;
 use Cassandra\Time;
@@ -88,7 +89,7 @@ class StatsController extends Controller
     public function stats(){
         $session = App::$app->session;
         if( isset($_POST['endDate']) & isset($_POST['startDate'])){
-            echo "acum setez ";
+//            echo "acum setez ";
             self::$startDate=$_POST['startDate'];
             self::$endDate=$_POST['endDate'];
             $session->set("startDate", $_POST['startDate']);
@@ -99,20 +100,27 @@ class StatsController extends Controller
 
         $myArray=array();
 
-        $myArray=Stats::findByIdPublication(1);
 
-        echo "time o " . $myArray[0] . "<br>";
-        echo "time 1 " . $myArray[1] ."<br>";
+
+//        echo "time o " . $myArray[0] . "<br>";
+//        echo "time 1 " . $myArray[1] ."<br>";
+
+        $link = $_SERVER['REQUEST_URI'];
+        $pub = preg_split("[/]", $link);
+        $pub = $pub[2];
+        $id = Publication::getPublicationProprietyByLink('id', $pub);
+
+        $myArray=Stats::findByIdPublication($id);
 
         $session = App::$app->session;
-        echo "start = ". $session->get("startDate");
+//        echo "start = ". $session->get("startDate");
         for($i=0; $i<count($myArray); $i++){
             if($myArray[$i] >= date('Y-m-d h:i:s', strtotime($session->get("startDate"))) && $myArray[$i] <= date('Y-m-d h:i:s', strtotime($session->get("endDate"))) ){
                 self::$nrViews++;
             }
         }
 
-        echo  "nr de elemente filtrate ". self::$nrViews;
+//        echo  "nr de elemente filtrate ". self::$nrViews;
 
         return $this::render('stats');
     }
