@@ -106,11 +106,50 @@ abstract class DbModel extends Model
 
         $it = 0;
         while ($row=$statement->fetch()) {
-            $result[$it] = $row['link'];
+            $result[$it] = $row[$property];
             $it++;
         }
 
         return $result;
+    }
+
+    public static function getPublicationPropriety($property)
+    {
+        $query="SELECT * FROM publications";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        $it = 0;
+        while ($row=$statement->fetch()) {
+            $result[$it] = $row[$property];
+            $it++;
+        }
+
+        return $result;
+    }
+
+    public static function getUserPropriety($property)
+    {
+        $query="SELECT * FROM users where id != 100";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        $it = 0;
+        while ($row=$statement->fetch()) {
+            $result[$it] = $row[$property];
+            $it++;
+        }
+
+        return $result;
+    }
+
+    public static function getUserMailById($id)
+    {
+        $query="SELECT email FROM users WHERE id = $id";
+        $statement=self::prepare($query);
+        $statement->execute();
+
+        return $statement->fetch();
     }
 
     public static function countPublicationOfUser($id): int
@@ -121,9 +160,31 @@ abstract class DbModel extends Model
         return $sql->rowCount();
     }
 
+    public static function countAllPublications(): int
+    {
+        $sql= self::prepare("SELECT * FROM publications");
+        $sql->execute();
+
+        return $sql->rowCount();
+    }
+
+    public static function countAllUsers(): int
+    {
+        $sql= self::prepare("SELECT * FROM users");
+        $sql->execute();
+
+        return $sql->rowCount();
+    }
+
     public static function updatePublication($property, $value, $link) {
         $query= "UPDATE publications SET " . $property  . "=" . "'" . $value  . "'" . " where " . "link" . "=" . "'" . $link  . "'";
-//        echo $query;
+        $statement=self::prepare($query);
+        $statement->execute();
+    }
+
+    public static function deleteUser($id) {
+        $query= "DELETE FROM users WHERE id = $id";
+        echo $query;
         $statement=self::prepare($query);
         $statement->execute();
     }

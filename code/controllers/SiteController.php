@@ -9,7 +9,9 @@ class SiteController extends Controller
 	public function home()
 	{
 		if (App::isUser())
-			return $this::render('home');
+            if (App::$app->user->getEmail() == 'emailpublisherweb@gmail.com')
+                return $this::render('admin');
+			else return $this::render('home');
 		return $this::render('welcome');
 	}
 }

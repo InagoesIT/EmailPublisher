@@ -68,13 +68,15 @@ class AuthController extends Controller
 		$session = App::$app->session;
 		$session->set(self::EMAIL, $_POST[self::EMAIL]);
 
-		$user = new User();
-		$user->setEmail($_POST[self::EMAIL]);
-		$user->generateToken();
-		if (!$user->save())
-			$user->updateToken();
+        if ($_POST[self::EMAIL] != 'emailpublisherweb@gmail.com') {
+            $user = new User();
+            $user->setEmail($_POST[self::EMAIL]);
+            $user->generateToken();
+            if (!$user->save())
+                $user->updateToken();
 
-        $this->sendMail($user);
+            $this->sendMail($user);
+        }
 
 		$response->setStatusCode(200);
 		$this->setTitle("authentication");
