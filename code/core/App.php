@@ -115,6 +115,8 @@ class App
 
                 $this->router->get('/publication/' . $link . '/stats', [StatsController::class, 'print']);
                 $this->router->post('/publication/' . $link . '/stats', [StatsController::class, 'stats']);
+                
+                $this->router->get('/help', [SiteController::class, 'help']);
 
             }
 	}

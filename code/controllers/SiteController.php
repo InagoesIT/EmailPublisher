@@ -14,4 +14,9 @@ class SiteController extends Controller
 			else return $this::render('home');
 		return $this::render('welcome');
 	}
+	
+	public function help()
+	{
+		return App::$app->view->renderViewOnly('help');
+	}
 }
