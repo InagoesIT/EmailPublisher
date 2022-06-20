@@ -38,7 +38,7 @@ use app\models\Publication;
                 </div>
                 <div class="publicationStatistics">
                     <button type="button" class="pStatistics" onclick="window.location.href='/stats'">Statistics</button>
-                </div>
+            </div>
             </div>
         <?php endfor; ?>
     </div>
