@@ -115,7 +115,7 @@ class StatsController extends Controller
         $session = App::$app->session;
 //        echo "start = ". $session->get("startDate");
         for($i=0; $i<count($myArray); $i++){
-            if($myArray[$i] >= date('Y-m-d h:i:s', strtotime($session->get("startDate"))) && $myArray[$i] <= date('Y-m-d h:i:s', strtotime($session->get("endDate"))) ){
+            if($myArray[$i] >= date('Y-m-d H:i:s', strtotime($session->get("startDate"))) && $myArray[$i] <= date('Y-m-d H:i:s', strtotime($session->get("endDate"))) ){
                 self::$nrViews++;
             }
         }

@@ -69,7 +69,7 @@
         font-size: 25px;
         color: black;
         background-color: #BCCE98;
-        margin-left: 6%;
+        /*margin-left: 6%;*/
         height: 65px;
         border-radius: 10px;
         border-color: yellow;
@@ -255,6 +255,8 @@ $startDay=date('d', strtotime($startDate));
 //}
 
 ?>
+
+
 <div class="appBar" id="appBar">
     <p class="title" id="title" style="margin-left: 40%"> Statistics for your email</p>
 
@@ -282,6 +284,8 @@ $startDay=date('d', strtotime($startDate));
     <div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
         <script type="text/javascript">
 
             google.load('visualization', '1', {packages: ['corechart'], callback: drawChart});
@@ -318,14 +322,14 @@ $startDay=date('d', strtotime($startDate));
 
                 keyArray=keyArray.unique();
 
-                // alert(keyArray.length);
+                for(let i=0; i<array.length;i+=2){
+                    for(let j=0; j <array.length/2; j+=2){
+                        if(array[i]===array[j] && i !== j){
+                            array.splice(i,2);
 
-                // for(let j=0;j<keyArray.length;j++){
-                //
-                //     data.addRows([
-                //         [keyArray[key], array.valueOf( keyArray[key]) ) ],
-                //     ]);
-                // }
+                        }
+                    }
+                }
 
                 for (let key = 0; key < array.length; key += 2) {
 
@@ -344,128 +348,37 @@ $startDay=date('d', strtotime($startDate));
 
                 var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
                 chart.draw(data, options);
+
+
+
+                var savePDF = document.getElementById('save-pdf');
+
+                savePDF.addEventListener('click', function () {
+                    // alert("hello");
+                    var doc = new jsPDF();
+                    doc.addImage(chart.getImageURI(), 0, 0);
+                    doc.save('chart.pdf');
+                }, false);
+
+
             }
 
         </script>
 
         <div id="content">
-            <div id="chart_div"></div>
+            <div id="chart_div" style="margin-left: 40%"></div>
         </div>
     </div>
-
 
     <div class="ExportRow">
         <p class="Text4">Export as:</p>
         <form method="post">
             <label for="types"></label>
-            <select name="types" id="types" class="exportOptions">
-                <option value="pdf">PDF</option>
-                <option value="html">HTML</option>
-                <option value="xml">XML</option>
-            </select>
-            <input type="submit" value="Submit" class="GenerateButton" id="save-pdf">
+            <input id="save-pdf" type="button" class="GenerateButton" value="PDF file" />
         </form>
     </div>
 </div>
 <hr>
-<!--<div class="firstRow">-->
-<!--    <p class="text1">Select how the chart should be grouped:</p>-->
-<!--    <form class="form2" method="post">-->
-<!--        <label for="groups" class="text1">Group by: </label>-->
-<!--        <select name="groups" id="groups" class="exportOptions">-->
-<!--            <option value="day" id="day" name="day">Day</option>-->
-<!--            <option value="week" id="week" name="week">Week</option>-->
-<!--            <option value="month" id="month" name="month">Month</option>-->
-<!--        </select>-->
-<!--    </form>-->
-<!--    <button type="submit" class="GenerateButton">Save Changes</button>-->
-<!--</div>-->
-<!--<hr>-->
-<div class="SecondStatsPlace">
-    <p class="Text5">The visitors diagram:</p>
-    <div>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.load('visualization', '1', {packages: ['bar'], callback: drawStuff});
-            google.charts.setOnLoadCallback(drawStuff);
 
-            function drawStuff(callback) {
-
-                let data = new google.visualization.DataTable();
-                data.addColumn('timeofday', 'Time of Day');
-                data.addColumn('number', 'Nr views');
-
-
-
-                // in dreapta adaug nr de views , in stanga adaug ora
-                let hourArray =<?php echo json_encode($hourArray); ?>;
-
-
-                let startHour = '<?= $startHour ?>';
-
-                let startDay = '<?= $startDay ?>';
-
-                let indexStart;
-                // alert(parseInt(startHour));
-
-                let nrDays = '<?= $nrDays ?>';
-
-                let generalArray;
-                if(parseInt(nrDays)===0){
-                    indexStart=startHour;
-                }else{
-                    indexStart=startDay;
-                }
-
-                for(let i=parseInt(indexStart);i<24; i++){
-
-                    // alert(hourArray[i]);
-
-                    data.addRows([
-                        [ {v: [i, 0, 0], f: i + " am"} , hourArray[i] ],
-                    ]);
-                }
-
-
-                let options = {
-                    title: 'Diagram group by hours/day',
-                    width: 1000,
-                    height: 400,
-                    hAxis: {
-                        title: 'Time of Day',
-                        format: 'h:mm a',
-                        viewWindow: {
-                            min: [0, 30, 0],
-                            max: [23, 30, 0]
-                        }
-                    },
-                    vAxis: {
-                        title: 'Nr views'
-                    }
-                };
-
-                let chart = new google.charts.Bar(document.getElementById('top_x_div'));
-                // Convert the Classic options to Material options.
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-        </script>
-
-
-        <div id="content">
-            <div id="top_x_div"></div>
-        </div>
-
-    </div>
-    <div class="ExportRow">
-        <p class="Text4">Export as:</p>
-        <form method="post">
-            <label for="types"></label>
-            <select name="types" id="types" class="exportOptions">
-                <option value="pdf">PDF</option>
-                <option value="html">HTML</option>
-                <option value="xml">XML</option>
-            </select>
-        </form>
-    </div>
 </div>
 
