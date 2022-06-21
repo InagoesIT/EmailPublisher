@@ -170,13 +170,18 @@ margin-bottom: 50px;
 </style>
 
 <div class="auth-email-wrapper">
-    <form class="auth-form" action="" method="post">
+    <form class="auth-form" action="" method="post" >
         <div class="input-label">
             <label for="input-wrapper" id="auth-label">enter your changes below</label>
         </div>
         <div class="input-wrapper">
+            <label for="visibility">Visibility</label>
             Visibility: <input type="text" class="input" id="visibility" name="visibility">
+
+            <label for="password">password</label>
             Password: <input type="text" class="input" id="password" name="password"><br>
+
+            <label for="duration">duration</label>
             Duration: <input type="text" class="input" id="duration" name="duration">
         </div>
         <button type="submit" id="auth-continue" class="continue-button auth-button">continue</button>
