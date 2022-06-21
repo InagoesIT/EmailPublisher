@@ -5,3 +5,7 @@
 -> The user guide is code/views/help.php
 
 -> The C4 diagram is documentation/C4_diagram.pdf
+
+-> The images containing the results regarding the performance of the pages obtained using Lighthouse can be found in pagesQuality folder.
+
+-> The mean for the performance of the web application is: 96.625.
